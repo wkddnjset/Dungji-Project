@@ -101,7 +101,16 @@ public class RetrofitClient {
 
     }
 
-
+    /**
+     * 응답 code 값을 확인하여 성공인 경우에만
+     * type으로 넘겨준 클래스로 data로 넘겨준 키워드를 파싱 후
+     * 리턴해주는 함수
+     *
+     * @param header retrofit 에서 준 응답
+     * @param type 파싱할 클래스
+     * @param data data 부분에 실려오는 키값
+     * @return
+     */
     private <T> T checkResponseData(ResponseHeaderModel header, Class<T> type, String data){
 
         Gson gson = new Gson();
@@ -125,18 +134,17 @@ public class RetrofitClient {
 
 
     /**
-     * Test 용 api 호출
-     * 방식 : GET
+     * 검색 필터값들 가져오는 api 호출
      * @param callback
      */
-    public void callGetTest(final RetrofitApiCallback callback){
+    public void callGetSearchFilter(final RetrofitApiCallback callback){
 
-        apiService.getTest().enqueue(new Callback<ResponseHeaderModel>() {
+        apiService.callGetSearchFilter().enqueue(new Callback<ResponseHeaderModel>() {
             @Override
             public void onResponse(Call<ResponseHeaderModel> call, Response<ResponseHeaderModel> response) {
                 if(response.isSuccessful()){
 
-                    SearchRecyclerModel result = checkResponseData(response.body(), SearchRecyclerModel.class, "filter");
+                    Object result = checkResponseData(response.body(), SearchRecyclerModel.class, "filter");
 
                     if(result != null)
                         callback.onSuccess(response.code(), result);

@@ -17,7 +17,7 @@ public interface RetrofitApiService {
 
 
     @GET("page/search")
-    Call<ResponseHeaderModel> getTest();
+    Call<ResponseHeaderModel> callGetSearchFilter();
 
 
 }

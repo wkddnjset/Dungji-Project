@@ -22,7 +22,7 @@ public class BaseActivity extends AppCompatActivity {
     private boolean isRootingFlag = false;
     private TextView mTitleView;
     private ImageButton mLeftIcon, mRightIcon;
-    private ProgressBarDialog mProgressDialog;
+    protected ProgressBarDialog mProgressDialog;
     private View.OnClickListener mLeftClickListener, mRightClickListener;
 
     public RetrofitClient networkClient;
@@ -37,6 +37,7 @@ public class BaseActivity extends AppCompatActivity {
 
         initHeaderBar();
 
+        mProgressDialog = new ProgressBarDialog(this);
 
         networkClient = RetrofitClient.getInstance(this).createBaseApi();
     }

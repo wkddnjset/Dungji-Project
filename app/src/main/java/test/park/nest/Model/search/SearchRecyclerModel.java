@@ -46,6 +46,7 @@ public class SearchRecyclerModel {
         @SerializedName("img")
         private String img = "";
 
+        private int dataType = 0;
 
         public int getId() {
             return id;
@@ -69,6 +70,14 @@ public class SearchRecyclerModel {
 
         public void setImg(String img) {
             this.img = img;
+        }
+
+        public int getDataType() {
+            return dataType;
+        }
+
+        public void setDataType(int dataType) {
+            this.dataType = dataType;
         }
     }
 }

@@ -1,6 +1,7 @@
 package test.park.nest.Network;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -12,6 +13,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import test.park.nest.Model.ResponseHeaderModel;
+import test.park.nest.Model.search.SearchRecyclerModel;
 
 
 /**
@@ -49,7 +52,7 @@ public class RetrofitClient {
 
         retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .baseUrl("http://13.209.214.110:8080/yourMentor/")
+                .baseUrl("http://54.180.53.96/")
                 .client(client)
                 .build();
     }
@@ -99,6 +102,28 @@ public class RetrofitClient {
     }
 
 
+    private <T> T checkResponseData(ResponseHeaderModel header, Class<T> type, String data){
+
+        Gson gson = new Gson();
+
+        if(header != null){
+
+            if(header.getCode().equals("0000")){
+
+                String jsonData = gson.toJson(header.getData().get(data));
+
+                Log.d("DATA", jsonData);
+
+                return gson.fromJson(jsonData, type);
+            }
+
+            return null;
+        }else{
+            return null;
+        }
+    }
+
+
     /**
      * Test 용 api 호출
      * 방식 : GET
@@ -106,19 +131,26 @@ public class RetrofitClient {
      */
     public void callGetTest(final RetrofitApiCallback callback){
 
-        apiService.getTest().enqueue(new Callback<String>() {
+        apiService.getTest().enqueue(new Callback<ResponseHeaderModel>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<ResponseHeaderModel> call, Response<ResponseHeaderModel> response) {
                 if(response.isSuccessful()){
-                    callback.onSuccess(response.code(), response.body());
+
+                    SearchRecyclerModel result = checkResponseData(response.body(), SearchRecyclerModel.class, "filter");
+
+                    if(result != null)
+                        callback.onSuccess(response.code(), result);
+                    else
+                        callback.onFailed(Integer.parseInt(response.body().getCode()), response.body().getMessage());
+
                 }else{
-                    callback.onFailed(response.code());
+                    callback.onFailed(response.code(), "네트워크 통신 에러");
                 }
 
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<ResponseHeaderModel> call, Throwable t) {
                 callback.onError(t);
             }
         });

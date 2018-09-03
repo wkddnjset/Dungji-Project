@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="10dp"
+    android:id="@+id/item_main_recy_ll">
+
+    <ImageView
+        android:id="@+id/item_main_recy_img"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/banner"/>
+    <TextView
+        android:id="@+id/item_main_recy_guGunName"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:textSize="10sp"/>
+    <TextView
+        android:id="@+id/item_main_recy_name"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:textSize="13sp"/>
+    <TextView
+        android:id="@+id/item_main_recy_address"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:textSize="10sp"/>
+
+
+</LinearLayout>

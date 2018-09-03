@@ -6,6 +6,6 @@ public interface RetrofitApiCallback<T> {
 
     void onSuccess(int code, T resultData);
 
-    void onFailed(int code);
+    void onFailed(int code, String msg);
 
 }

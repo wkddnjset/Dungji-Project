@@ -18,10 +18,11 @@ public class BaseActivity extends AppCompatActivity {
     public final String TAG = this.getClass().getSimpleName();
 
     private int mContentView = -1;
+    private int mLeftIconRes = -1;
     private boolean isRootingFlag = false;
     private TextView mTitleView;
     private ImageButton mLeftIcon, mRightIcon;
-    private ProgressBarDialog mProgressDialog;
+    protected ProgressBarDialog mProgressDialog;
     private View.OnClickListener mLeftClickListener, mRightClickListener;
 
     public RetrofitClient networkClient;
@@ -36,6 +37,7 @@ public class BaseActivity extends AppCompatActivity {
 
         initHeaderBar();
 
+        mProgressDialog = new ProgressBarDialog(this);
 
         networkClient = RetrofitClient.getInstance(this).createBaseApi();
     }
@@ -89,12 +91,18 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected int getLeftIconRes() {
-        return -1;
+        return mLeftIconRes;
     }
 
     protected int getRightIconRes() {
         return -1;
     }
+
+
+    protected void setLeftIconRes(int res){
+        mLeftIconRes = res;
+    }
+
 
     protected void setLeftIconClickListener(View.OnClickListener listener) {
         mLeftClickListener = listener;

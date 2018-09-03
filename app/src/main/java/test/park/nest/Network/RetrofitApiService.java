@@ -2,6 +2,7 @@ package test.park.nest.Network;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import test.park.nest.Model.ResponseHeaderModel;
 
 /**
  * Retrofit 을 활용하여 요청할 api 목록 인터페이스
@@ -15,8 +16,8 @@ import retrofit2.http.GET;
 public interface RetrofitApiService {
 
 
-    @GET("test")
-    Call<String> getTest();
+    @GET("page/search")
+    Call<ResponseHeaderModel> callGetSearchFilter();
 
 
 }

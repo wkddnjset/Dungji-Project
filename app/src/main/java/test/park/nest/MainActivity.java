@@ -1,5 +1,6 @@
 package test.park.nest;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import test.park.nest.Adapter.MainRecyclerAdapter;
 import test.park.nest.Fragment.MainViewpagerFragment;
 import test.park.nest.Model.MainRecyclerModel;
+import test.park.nest.Search.SearchMainActivity;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, ViewPager.OnPageChangeListener {
@@ -56,6 +58,13 @@ public class MainActivity extends BaseActivity
             }
         });
 
+        setRightIconClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SearchMainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import test.park.nest.Dialog.ProgressBarDialog;
+import test.park.nest.Network.RetrofitClient;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -23,6 +24,8 @@ public class BaseActivity extends AppCompatActivity {
     private ProgressBarDialog mProgressDialog;
     private View.OnClickListener mLeftClickListener, mRightClickListener;
 
+    public RetrofitClient networkClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,9 @@ public class BaseActivity extends AppCompatActivity {
         setContentView(getContentView());
 
         initHeaderBar();
+
+
+        networkClient = RetrofitClient.getInstance(this).createBaseApi();
     }
 
 

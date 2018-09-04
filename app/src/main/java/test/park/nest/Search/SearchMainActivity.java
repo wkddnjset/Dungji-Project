@@ -209,6 +209,8 @@ public class SearchMainActivity extends BaseActivity implements View.OnClickList
 
                         Intent intent = new Intent(SearchMainActivity.this, SearchResultActivity.class);
                         intent.putExtra("pageNum", 1);
+                        intent.putExtra("filterConvFac", filterConvFac);
+                        intent.putExtra("filterSido", filterSido);
                         intent.putExtra("tagConvFacList", tagConvFacList);
                         intent.putExtra("tagSidoList", tagSidoList);
                         intent.putExtra("result", (SearchResultModel)resultData);

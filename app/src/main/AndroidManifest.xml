@@ -26,6 +26,7 @@
 
 
         <activity android:name=".Search.SearchMainActivity"/>
+        <activity android:name=".Search.SearchResultActivity"/>
 
     </application>
 

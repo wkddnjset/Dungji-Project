@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -15,6 +16,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import test.park.nest.Model.ResponseHeaderModel;
 import test.park.nest.Model.search.SearchRecyclerModel;
+import test.park.nest.Model.search.SearchResultModel;
 
 
 /**
@@ -163,5 +165,33 @@ public class RetrofitClient {
             }
         });
 
+    }
+
+
+    public void callPostSearchResult(final RetrofitApiCallback callback, JsonObject body){
+
+        apiService.callPostSearchResult(body).enqueue(new Callback<ResponseHeaderModel>() {
+            @Override
+            public void onResponse(Call<ResponseHeaderModel> call, Response<ResponseHeaderModel> response) {
+                if(response.isSuccessful()){
+
+                    Object result = checkResponseData(response.body(), SearchResultModel.class, "shelter");
+
+                    if(result != null)
+                        callback.onSuccess(response.code(), result);
+                    else
+                        callback.onFailed(Integer.parseInt(response.body().getCode()), response.body().getMessage());
+
+                }else{
+                    callback.onFailed(response.code(), "네트워크 통신 에러");
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseHeaderModel> call, Throwable t) {
+
+            }
+        });
     }
 }

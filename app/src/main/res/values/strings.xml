@@ -6,4 +6,11 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+
+
+    <string name="search_top_title">검색 결과</string>
+
+
+    <string name="empty_search_filter">지역 혹은 편의시설 중에 1개 이상을 선택해주세요.</string>
+
 </resources>

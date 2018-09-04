@@ -44,15 +44,12 @@ public class SearchResultActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        setLeftIconRes(R.drawable.back);
         setLeftIconClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-
-        setTopBarBackgroundColor(getResources().getColor(R.color.grey_f8f8f8));
 
         super.onCreate(savedInstanceState);
 
@@ -112,6 +109,15 @@ public class SearchResultActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected int getBackColorRes() {
+        return R.color.grey_f8f8f8;
+    }
+
+    @Override
+    protected int getLeftIconRes() {
+        return R.drawable.back;
+    }
 
     @Override
     protected int getContentView() {

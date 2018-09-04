@@ -89,7 +89,6 @@ public class SearchMainActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        setLeftIconRes(R.drawable.back);
         setLeftIconClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,6 +164,10 @@ public class SearchMainActivity extends BaseActivity implements View.OnClickList
         return R.layout.activity_search_main;
     }
 
+    @Override
+    protected int getLeftIconRes() {
+        return R.drawable.back;
+    }
 
 
     @Override

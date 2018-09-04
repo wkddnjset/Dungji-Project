@@ -42,9 +42,9 @@ public class SearchMainRecyclerAdapter extends RecyclerView.Adapter<SearchMainRe
     @Override
     public void onBindViewHolder(@NonNull SearchMainViewHolder holder, int position) {
 
-        // 처음에 첫번째는 무조건 선택상태로
-        if(position == 0)
-            holder.itemView.setSelected(true);
+//        // 처음에 첫번째는 무조건 선택상태로
+//        if(position == 0)
+//            holder.itemView.setSelected(true);
 
 
         dataList.get(position).setDataType(dataType);

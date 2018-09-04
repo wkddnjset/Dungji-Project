@@ -111,7 +111,7 @@ public class SearchResultActivity extends BaseActivity {
 
     @Override
     protected int getBackColorRes() {
-        return R.color.grey_f8f8f8;
+        return getResources().getColor(R.color.grey_f8f8f8);
     }
 
     @Override

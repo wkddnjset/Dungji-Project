@@ -6,4 +6,20 @@
     <color name="colorAccent">#FF4081</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+
+
+
+    <color name="black_343434">#343434</color>
+    <color name="black_232323">#232323</color>
+
+    <color name="red_eb6877">#eb6877</color>
+
+    <color name="blue_2ac1bc">#2ac1bc</color>
+    <color name="blue_0068b7">#0068b7</color>
+
+    <color name="grey_d9d9d9">#d9d9d9</color>
+    <color name="grey_7c7c7c">#7c7c7c</color>
+    <color name="grey_f8f8f8">#f8f8f8</color>
+
+    <color name="green_86c894">#86c894</color>
 </resources>

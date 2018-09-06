@@ -1,7 +1,13 @@
 package test.park.nest.Network;
 
+import com.google.gson.JsonObject;
+
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
+import retrofit2.http.POST;
+import test.park.nest.Model.ResponseHeaderModel;
 
 /**
  * Retrofit 을 활용하여 요청할 api 목록 인터페이스
@@ -15,8 +21,11 @@ import retrofit2.http.GET;
 public interface RetrofitApiService {
 
 
-    @GET("test")
-    Call<String> getTest();
+    @GET("api/page/search")
+    Call<ResponseHeaderModel> callGetSearchFilter();
 
+    @Headers("Content-Type: application/json")
+    @POST("api/page/search/result")
+    Call<ResponseHeaderModel> callPostSearchResult(@Body JsonObject body);
 
 }

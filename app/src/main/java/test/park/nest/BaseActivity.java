@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import test.park.nest.Dialog.ProgressBarDialog;
@@ -18,10 +19,14 @@ public class BaseActivity extends AppCompatActivity {
     public final String TAG = this.getClass().getSimpleName();
 
     private int mContentView = -1;
+    private int mLeftIconRes = -1;
+    private int mBackColorRes = -1;
     private boolean isRootingFlag = false;
+
+    private LinearLayout mParent;
     private TextView mTitleView;
     private ImageButton mLeftIcon, mRightIcon;
-    private ProgressBarDialog mProgressDialog;
+    protected ProgressBarDialog mProgressDialog;
     private View.OnClickListener mLeftClickListener, mRightClickListener;
 
     public RetrofitClient networkClient;
@@ -36,6 +41,7 @@ public class BaseActivity extends AppCompatActivity {
 
         initHeaderBar();
 
+        mProgressDialog = new ProgressBarDialog(this);
 
         networkClient = RetrofitClient.getInstance(this).createBaseApi();
     }
@@ -46,7 +52,7 @@ public class BaseActivity extends AppCompatActivity {
         mTitleView = (TextView) findViewById(R.id.title);
         mLeftIcon = (ImageButton) findViewById(R.id.left_btn);
         mRightIcon = (ImageButton) findViewById(R.id.right_btn);
-
+        mParent = (LinearLayout) findViewById(R.id.topbar_parent);
 
 
         if (mTitleView != null && getTitleRes() != -1) {
@@ -73,6 +79,12 @@ public class BaseActivity extends AppCompatActivity {
             if (mRightIcon != null)
                 mRightIcon.setVisibility(View.GONE);
         }
+
+
+        if(mParent != null && getBackColorRes() != -1){
+            mParent.setBackgroundColor(getBackColorRes());
+        }
+
     }
 
     @Override
@@ -89,12 +101,15 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected int getLeftIconRes() {
-        return -1;
+        return mLeftIconRes;
     }
 
     protected int getRightIconRes() {
         return -1;
     }
+
+    protected int getBackColorRes() {return mBackColorRes;}
+
 
     protected void setLeftIconClickListener(View.OnClickListener listener) {
         mLeftClickListener = listener;

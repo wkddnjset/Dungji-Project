@@ -13,10 +13,12 @@ public class SearchResultModel implements Parcelable{
     @SerializedName("shelterSimpleList")
     private ArrayList<SearchResultItem> shelterSimpleList = new ArrayList<>();
 
-
+    @SerializedName("count")
+    private int count = 0;
 
     protected SearchResultModel(Parcel in) {
         this.shelterSimpleList = in.createTypedArrayList(SearchResultItem.CREATOR);
+        count = in.readInt();
     }
 
     public static final Creator<SearchResultModel> CREATOR = new Creator<SearchResultModel>() {
@@ -39,6 +41,14 @@ public class SearchResultModel implements Parcelable{
         this.shelterSimpleList = shelterSimpleList;
     }
 
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -47,6 +57,7 @@ public class SearchResultModel implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeTypedList(shelterSimpleList);
+        dest.writeInt(count);
     }
 
 

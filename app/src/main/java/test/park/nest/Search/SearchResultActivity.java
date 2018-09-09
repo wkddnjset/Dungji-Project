@@ -50,9 +50,7 @@ public class SearchResultActivity extends BaseActivity {
     private boolean isLoad = false;
     private boolean isAllData = false;
 
-
-    private float preMoveX = 0;
-    private float preMoveY = 0;
+    private int totalCount = 0;
 
     private int pageNum = 1;
     private ArrayList<Integer> filterConvFac = new ArrayList<>();
@@ -173,6 +171,13 @@ public class SearchResultActivity extends BaseActivity {
 
     private void callMoreSearchResult() {
 
+
+        if(isAllData)
+            return;
+
+        if(totalCount == resultData.getShelterSimpleList().size())
+            return;
+
         isLoad = true;
 
         JsonObject innerObject = new JsonObject();
@@ -187,7 +192,6 @@ public class SearchResultActivity extends BaseActivity {
             @Override
             public void onError(Throwable t) {
                 isLoad = false;
-                isAllData = true;
             }
 
             @Override
@@ -196,12 +200,20 @@ public class SearchResultActivity extends BaseActivity {
                 isLoad = false;
 
                 if (addData != null && ((SearchResultModel) addData).getShelterSimpleList().size() > 0) {
+
+                    totalCount = ((SearchResultModel) addData).getCount();
+
+
+                    if(totalCount == 0 ||
+                            totalCount == resultData.getShelterSimpleList().size())
+                        isAllData = true;
+                    else
+                        isAllData = false;
+
                     int startIndex = resultData.getShelterSimpleList().size();
 
                     resultData.getShelterSimpleList().addAll(((SearchResultModel) addData).getShelterSimpleList());
                     resultAdapter.notifyItemRangeInserted(startIndex, ((SearchResultModel) addData).getShelterSimpleList().size());
-
-                    isAllData = false;
 
                 }else{
 
@@ -213,7 +225,6 @@ public class SearchResultActivity extends BaseActivity {
             @Override
             public void onFailed(int code, String msg) {
                 isLoad = false;
-                isAllData = true;
             }
         }, bodyObject);
     }

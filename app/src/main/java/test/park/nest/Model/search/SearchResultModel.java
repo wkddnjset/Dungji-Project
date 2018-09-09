@@ -84,6 +84,10 @@ public class SearchResultModel implements Parcelable{
         private int distance = 0;
 
 
+        @SerializedName("type")
+        private int type = 0 ;
+
+
         protected SearchResultItem(Parcel in) {
             id = in.readInt();
             name = in.readString();
@@ -94,6 +98,7 @@ public class SearchResultModel implements Parcelable{
             sidoName = in.readString();
             img = in.readString();
             distance = in.readInt();
+            type = in.readInt();
         }
 
         public static final Creator<SearchResultItem> CREATOR = new Creator<SearchResultItem>() {
@@ -180,6 +185,15 @@ public class SearchResultModel implements Parcelable{
             this.distance = distance;
         }
 
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
+        }
+
         @Override
         public int describeContents() {
             return 0;
@@ -196,6 +210,7 @@ public class SearchResultModel implements Parcelable{
             dest.writeString(sidoName);
             dest.writeString(img);
             dest.writeInt(distance);
+            dest.writeInt(type);
         }
     }
 }

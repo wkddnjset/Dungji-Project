@@ -66,6 +66,25 @@ public class SearchResultRecyclerAdapter extends RecyclerView.Adapter<SearchResu
 
         holder.shelterName.setText(searchResultItems.get(position).getName());
         holder.shelterArea.setText(searchResultItems.get(position).getSidoName() + " " + searchResultItems.get(position).getGuGunName());
+
+
+
+        if(searchResultItems.get(position).getType() == 1){
+
+            holder.shelterType.setText("일시 쉼터");
+            holder.shelterType.setTextColor(context.getResources().getColor(R.color.green_86c894));
+
+        }else if (searchResultItems.get(position).getType() == 2) {
+
+            holder.shelterType.setText("단기 쉼터");
+            holder.shelterType.setTextColor(context.getResources().getColor(R.color.red_eb6877));
+
+        }else {
+
+            holder.shelterType.setText("중장기 쉼터");
+            holder.shelterType.setTextColor(context.getResources().getColor(R.color.blue_0068b7));
+        }
+
     }
 
     @Override

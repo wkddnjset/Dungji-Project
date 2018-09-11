@@ -13,19 +13,17 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import test.park.nest.Model.MainRecyclerModel;
 import test.park.nest.R;
 
 public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapter.ViewHolder> {
     private Context context;
-    private LayoutInflater inflater;
-    private ArrayList<MainRecyclerModel> arrData;
+    private ArrayList<MainRecyclerModel.shelterItem> dataList = new ArrayList<>();
 
-    public MainRecyclerAdapter(Context c, ArrayList<MainRecyclerModel> arr) {
+    public MainRecyclerAdapter(Context c) {
         this.context = c;
-        this.arrData = arr;
-
-        inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -36,10 +34,11 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final MainRecyclerModel items = arrData.get(position);
+        final MainRecyclerModel.shelterItem items = dataList.get(position);
         try {
-
-//            Glide.with(items.getActivity()).load(items.getImg()).into(holder.item_main_recy_img);
+            Glide.with(context)
+                    .load(items.getImg())
+                    .into(holder.item_main_recy_img);
 
             holder.item_main_recy_guGunName.setText(items.getGuGunName());
             holder.item_main_recy_name.setText(items.getName());
@@ -50,24 +49,36 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
 
     }
 
+    public void setDataList(ArrayList<MainRecyclerModel.shelterItem> dataList) {
+            this.dataList = dataList;
+    }
+
     @Override
 
     public int getItemCount() {
-        return this.arrData.size();
+        return this.dataList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private LinearLayout item_main_recy_ll;
-        private ImageView item_main_recy_img;
-        private TextView item_main_recy_guGunName, item_main_recy_name, item_main_recy_address;
+
+        @BindView(R.id.item_main_recy_ll)
+        LinearLayout item_main_recy_ll;
+
+        @BindView(R.id.item_main_recy_img)
+        ImageView item_main_recy_img;
+
+        @BindView(R.id.item_main_recy_guGunName)
+        TextView item_main_recy_guGunName;
+
+        @BindView(R.id.item_main_recy_name)
+        TextView item_main_recy_name;
+
+        @BindView(R.id.item_main_recy_address)
+        TextView item_main_recy_address;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            item_main_recy_ll = (LinearLayout) itemView.findViewById(R.id.item_main_recy_ll);
-            item_main_recy_img = (ImageView) itemView.findViewById(R.id.item_main_recy_img);
-            item_main_recy_guGunName = (TextView) itemView.findViewById(R.id.item_main_recy_guGunName);
-            item_main_recy_name = (TextView) itemView.findViewById(R.id.item_main_recy_name);
-            item_main_recy_address = (TextView) itemView.findViewById(R.id.item_main_recy_address);
+            ButterKnife.bind(this, itemView);
 
             itemView.setOnClickListener(this);
         }

@@ -28,4 +28,8 @@ public interface RetrofitApiService {
     @POST("api/page/search/result")
     Call<ResponseHeaderModel> callPostSearchResult(@Body JsonObject body);
 
+
+    @Headers("Content-Type: application/json")
+    @POST("api/page/main")
+    Call<ResponseHeaderModel> callPostMainResult(@Body JsonObject body);
 }

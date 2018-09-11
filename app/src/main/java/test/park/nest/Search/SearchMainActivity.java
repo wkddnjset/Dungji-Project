@@ -2,7 +2,6 @@ package test.park.nest.Search;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -13,15 +12,12 @@ import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import test.park.nest.Adapter.search.SearchMainRecyclerAdapter;
-import test.park.nest.BaseActivity;
+import test.park.nest.Activitiy.BaseActivity;
 import test.park.nest.Model.search.SearchRecyclerModel;
 import test.park.nest.Model.search.SearchRecyclerModel.SearchFilterModel;
 import test.park.nest.Model.search.SearchResultModel;

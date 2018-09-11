@@ -1,17 +1,14 @@
 package test.park.nest.Search;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.JsonObject;
@@ -21,7 +18,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import test.park.nest.Adapter.search.SearchResultRecyclerAdapter;
-import test.park.nest.BaseActivity;
+import test.park.nest.Activitiy.BaseActivity;
 import test.park.nest.Model.search.SearchResultModel;
 import test.park.nest.Network.RetrofitApiCallback;
 import test.park.nest.R;

@@ -14,6 +14,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import test.park.nest.Model.MainRecyclerModel;
 import test.park.nest.Model.ResponseHeaderModel;
 import test.park.nest.Model.search.SearchRecyclerModel;
 import test.park.nest.Model.search.SearchResultModel;
@@ -37,9 +38,10 @@ public class RetrofitClient {
 
     /**
      * 생성자
+     *
      * @param context
      */
-    private RetrofitClient(Context context){
+    private RetrofitClient(Context context) {
 
         // retrofit 네트워크 로그를 보기 위한 객체 생성
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -62,6 +64,7 @@ public class RetrofitClient {
 
     /**
      * 클라이언트 싱글톤 객체 반환
+     *
      * @param context
      * @return
      */
@@ -77,6 +80,7 @@ public class RetrofitClient {
     /**
      * 클라이언트 api 서비스 객체를 생성한 뒤
      * 클라이언트 객체를 반환한다
+     *
      * @return
      */
     public RetrofitClient createBaseApi() {
@@ -89,6 +93,7 @@ public class RetrofitClient {
 
     /**
      * retrofit api 서비스를 생성하기 위한 함수
+     *
      * @param service
      * @param <T>
      * @return
@@ -109,27 +114,26 @@ public class RetrofitClient {
      * 리턴해주는 함수
      *
      * @param header retrofit 에서 준 응답
-     * @param type 파싱할 클래스
-     * @param data data 부분에 실려오는 키값
+     * @param type   파싱할 클래스
+     * @param data   data 부분에 실려오는 키값
      * @return
      */
-    private <T> T checkResponseData(ResponseHeaderModel header, Class<T> type, String data){
+    private <T> T checkResponseData(ResponseHeaderModel header, Class<T> type, String data) {
 
         Gson gson = new Gson();
 
-        if(header != null){
+        if (header != null) {
 
-            if(header.getCode().equals("0000")){
+            if (header.getCode().equals("0000")) {
 
                 String jsonData = gson.toJson(header.getData().get(data));
-
                 Log.d("DATA", jsonData);
 
                 return gson.fromJson(jsonData, type);
             }
 
             return null;
-        }else{
+        } else {
             return null;
         }
     }
@@ -137,23 +141,24 @@ public class RetrofitClient {
 
     /**
      * 검색 필터값들 가져오는 api 호출
+     *
      * @param callback
      */
-    public void callGetSearchFilter(final RetrofitApiCallback callback){
+    public void callGetSearchFilter(final RetrofitApiCallback callback) {
 
         apiService.callGetSearchFilter().enqueue(new Callback<ResponseHeaderModel>() {
             @Override
             public void onResponse(Call<ResponseHeaderModel> call, Response<ResponseHeaderModel> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
 
                     Object result = checkResponseData(response.body(), SearchRecyclerModel.class, "filter");
 
-                    if(result != null)
+                    if (result != null)
                         callback.onSuccess(response.code(), result);
                     else
                         callback.onFailed(Integer.parseInt(response.body().getCode()), response.body().getMessage());
 
-                }else{
+                } else {
                     callback.onFailed(response.code(), "네트워크 통신 에러");
                 }
 
@@ -168,21 +173,21 @@ public class RetrofitClient {
     }
 
 
-    public void callPostSearchResult(final RetrofitApiCallback callback, JsonObject body){
+    public void callPostSearchResult(final RetrofitApiCallback callback, JsonObject body) {
 
         apiService.callPostSearchResult(body).enqueue(new Callback<ResponseHeaderModel>() {
             @Override
             public void onResponse(Call<ResponseHeaderModel> call, Response<ResponseHeaderModel> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
 
                     Object result = checkResponseData(response.body(), SearchResultModel.class, "shelter");
 
-                    if(result != null)
+                    if (result != null)
                         callback.onSuccess(response.code(), result);
                     else
                         callback.onFailed(Integer.parseInt(response.body().getCode()), response.body().getMessage());
 
-                }else{
+                } else {
                     callback.onFailed(response.code(), "네트워크 통신 에러");
                 }
 
@@ -190,6 +195,34 @@ public class RetrofitClient {
 
             @Override
             public void onFailure(Call<ResponseHeaderModel> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+    public void callPostMainResult(final RetrofitApiCallback callback, JsonObject body) {
+
+        apiService.callPostMainResult(body).enqueue(new Callback<ResponseHeaderModel>() {
+            @Override
+            public void onResponse(Call<ResponseHeaderModel> call, Response<ResponseHeaderModel> response) {
+                Log.e("callPostMainResult", "onResponse");
+
+                if (response.isSuccessful()) {
+                    Object result = checkResponseData(response.body(), MainRecyclerModel.class, "data");
+
+                    if (result != null)
+                        callback.onSuccess(response.code(), result);
+                    else
+                        callback.onFailed(Integer.parseInt(response.body().getCode()), response.body().getMessage());
+                } else {
+                    callback.onFailed(response.code(), "네트워크 통신 에러");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseHeaderModel> call, Throwable t) {
+                Log.e("callPostMainResult", "onFailure");
 
             }
         });

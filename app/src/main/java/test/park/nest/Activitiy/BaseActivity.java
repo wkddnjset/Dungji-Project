@@ -1,4 +1,4 @@
-package test.park.nest;
+package test.park.nest.Activitiy;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import test.park.nest.Dialog.ProgressBarDialog;
 import test.park.nest.Network.RetrofitClient;
+import test.park.nest.R;
 
 public class BaseActivity extends AppCompatActivity {
 

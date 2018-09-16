@@ -23,6 +23,8 @@ import android.view.View;
 import com.google.gson.JsonObject;
 import com.matthewtamlin.sliding_intro_screen_library.DotIndicator;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -41,6 +43,7 @@ public class MainActivity extends BaseActivity
     private StaggeredGridLayoutManager mLayoutManager;
     private MainRecyclerAdapter mMainRecyclerAdapter;
 
+    private ArrayList<MainRecyclerModel.bannerItem> bannerList = null;
     RecyclerView mRecyclerView;
 
     ViewPager mViewPager;
@@ -54,7 +57,6 @@ public class MainActivity extends BaseActivity
     NavigationView navigationView;
 
     private ActionBarDrawerToggle toggle;
-    private int pagecount = 3;
 
 
     Unbinder unbinder;
@@ -75,22 +77,15 @@ public class MainActivity extends BaseActivity
 
     private void initLayout() {
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mDotIndicator = (DotIndicator) findViewById(R.id.DotIndicator);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mRecyclerView = findViewById(R.id.recyclerView);
+        mViewPager = findViewById(R.id.pager);
+        mDotIndicator = findViewById(R.id.DotIndicator);
+        navigationView = findViewById(R.id.nav_view);
+        drawer = findViewById(R.id.drawer_layout);
 
 //        toggle = new ActionBarDrawerToggle(this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 //        drawer.addDrawerListener(toggle);
 //        toggle.syncState();
-
-
-        mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
-        mViewPager.setAdapter(mPagerAdapter);
-        mDotIndicator.setSelectedDotColor(Color.parseColor("#ff5580"));
-        mDotIndicator.setUnselectedDotColor(Color.parseColor("#dadada"));
-        mDotIndicator.setNumberOfItems(pagecount);
 
 
         mMainRecyclerAdapter = new MainRecyclerAdapter(MainActivity.this);
@@ -98,6 +93,9 @@ public class MainActivity extends BaseActivity
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mLayoutManager.setItemPrefetchEnabled(true);
 
+
+        mDotIndicator.setSelectedDotColor(Color.parseColor("#ff5580"));
+        mDotIndicator.setUnselectedDotColor(Color.parseColor("#dadada"));
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mMainRecyclerAdapter);
@@ -131,6 +129,7 @@ public class MainActivity extends BaseActivity
         JsonObject innerObject = new JsonObject();
         innerObject.addProperty("longitude", gpsInfo.getLongitude());
         innerObject.addProperty("latitude", gpsInfo.getLatitude());
+        innerObject.addProperty("pageNo", 10);
 
         JsonObject bodyObject = new JsonObject();
         bodyObject.add("shelter", innerObject);
@@ -149,6 +148,15 @@ public class MainActivity extends BaseActivity
 
                 mMainRecyclerAdapter.setDataList(((MainRecyclerModel) resultData).getShelterSimpleList());
                 mMainRecyclerAdapter.notifyDataSetChanged();
+
+                bannerList = ((MainRecyclerModel) resultData).getBannerList();
+
+                mPagerAdapter = new PagerAdapter(getSupportFragmentManager(), bannerList);
+                mViewPager.setAdapter(mPagerAdapter);
+
+
+                mDotIndicator.setNumberOfItems(bannerList.size());
+
 
             }
 
@@ -258,19 +266,21 @@ public class MainActivity extends BaseActivity
 
     private class PagerAdapter extends FragmentStatePagerAdapter {
 
-        public PagerAdapter(FragmentManager fm) {
+        private ArrayList<MainRecyclerModel.bannerItem> bannerItems;
+
+        public PagerAdapter(FragmentManager fm, ArrayList<MainRecyclerModel.bannerItem> bannerItems) {
             super(fm);
+            this.bannerItems = bannerItems;
         }
 
         @Override
         public Fragment getItem(int position) {
-            return MainViewpagerFragment.create(position);
+            return MainViewpagerFragment.create(position, bannerItems);
         }
 
         @Override
         public int getCount() {
-
-            return pagecount;
+            return bannerItems.size();
         }
     }
 }

@@ -126,7 +126,7 @@ public class RetrofitClient {
 
             if (header.getCode().equals("0000")) {
 
-                String jsonData = gson.toJson(header.getData().get(data));
+                String jsonData = gson.toJson(header.getData());
                 Log.d("DATA", jsonData);
 
                 return gson.fromJson(jsonData, type);

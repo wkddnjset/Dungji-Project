@@ -1,12 +1,16 @@
 package test.park.nest.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class MainRecyclerModel {
+import test.park.nest.Model.search.SearchResultModel;
+
+public class MainRecyclerModel implements Parcelable{
 
 
     @SerializedName("banner")
@@ -15,6 +19,22 @@ public class MainRecyclerModel {
 
     @SerializedName("shelter")
     private ArrayList<shelterItem> shelterSimpleList = new ArrayList<>();
+
+    protected MainRecyclerModel(Parcel in) {
+        bannerList = in.createTypedArrayList(bannerItem.CREATOR);
+    }
+
+    public static final Creator<MainRecyclerModel> CREATOR = new Creator<MainRecyclerModel>() {
+        @Override
+        public MainRecyclerModel createFromParcel(Parcel in) {
+            return new MainRecyclerModel(in);
+        }
+
+        @Override
+        public MainRecyclerModel[] newArray(int size) {
+            return new MainRecyclerModel[size];
+        }
+    };
 
     public ArrayList<bannerItem> getBannerList() {
         return bannerList;
@@ -30,6 +50,17 @@ public class MainRecyclerModel {
 
     public void setShelterSimpleList(ArrayList<shelterItem> shelterSimpleList) {
         this.shelterSimpleList = shelterSimpleList;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(bannerList);
+
     }
 
     public static class shelterItem {
@@ -147,8 +178,7 @@ public class MainRecyclerModel {
 
     }
 
-
-    public static class bannerItem {
+    public static class bannerItem  implements Parcelable{
 
 
         @SerializedName("name")
@@ -156,6 +186,25 @@ public class MainRecyclerModel {
 
         @SerializedName("img")
         private String img;
+
+        protected bannerItem(Parcel in) {
+            name = in.readString();
+            img = in.readString();
+        }
+
+        public static final Creator<bannerItem> CREATOR = new Creator<bannerItem>() {
+            @Override
+            public bannerItem createFromParcel(Parcel in) {
+                return new bannerItem(in);
+            }
+
+            @Override
+            public bannerItem[] newArray(int size) {
+                return new bannerItem[size];
+            }
+        };
+
+
 
         public String getName() {
             return name;
@@ -171,6 +220,19 @@ public class MainRecyclerModel {
 
         public void setImg(String img) {
             this.img = img;
+        }
+
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+
+            dest.writeString(name);
+            dest.writeString(img);
         }
     }
 }

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class SearchResultModel implements Parcelable{
 
 
-    @SerializedName("shelterSimpleList")
+    @SerializedName("list")
     private ArrayList<SearchResultItem> shelterSimpleList = new ArrayList<>();
 
     @SerializedName("count")

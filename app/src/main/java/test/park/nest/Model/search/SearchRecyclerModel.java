@@ -9,12 +9,18 @@ import test.park.nest.Model.ResponseHeaderModel;
 public class SearchRecyclerModel {
 
 
-    @SerializedName("convFacList")
+    @SerializedName("convFac")
     private ArrayList<SearchFilterModel> convFacList = null;
 
 
-    @SerializedName("sidoList")
+    @SerializedName("sido")
     private ArrayList<SearchFilterModel> sidoList = null;
+
+    @SerializedName("type")
+    private ArrayList<SearchFilterModel> typeList = null;
+
+    @SerializedName("sex")
+    private ArrayList<SearchFilterModel> sexList = null;
 
 
     public ArrayList<SearchFilterModel> getConvFacList() {
@@ -34,6 +40,21 @@ public class SearchRecyclerModel {
     }
 
 
+    public ArrayList<SearchFilterModel> getTypeList() {
+        return typeList;
+    }
+
+    public void setTypeList(ArrayList<SearchFilterModel> typeList) {
+        this.typeList = typeList;
+    }
+
+    public ArrayList<SearchFilterModel> getSexList() {
+        return sexList;
+    }
+
+    public void setSexList(ArrayList<SearchFilterModel> sexList) {
+        this.sexList = sexList;
+    }
 
     public class SearchFilterModel {
 

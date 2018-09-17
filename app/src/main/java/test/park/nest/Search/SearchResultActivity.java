@@ -52,6 +52,8 @@ public class SearchResultActivity extends BaseActivity {
     private int pageNum = 1;
     private ArrayList<Integer> filterConvFac = new ArrayList<>();
     private ArrayList<Integer> filterSido = new ArrayList<>();
+    private ArrayList<Integer> filterType = new ArrayList<>();
+    private ArrayList<Integer> filterSex = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +83,11 @@ public class SearchResultActivity extends BaseActivity {
 
             filterConvFac = getIntent().getIntegerArrayListExtra("filterConvFac");
             filterSido = getIntent().getIntegerArrayListExtra("filterSido");
+            filterType = getIntent().getIntegerArrayListExtra("filterType");
+            filterSex = getIntent().getIntegerArrayListExtra("filterSex");
 
+            tagList.addAll(getIntent().getStringArrayListExtra("tagSexList"));
+            tagList.addAll(getIntent().getStringArrayListExtra("tagTypeList"));
             tagList.addAll(getIntent().getStringArrayListExtra("tagSidoList"));
             tagList.addAll(getIntent().getStringArrayListExtra("tagConvFacList"));
 
@@ -179,8 +185,10 @@ public class SearchResultActivity extends BaseActivity {
 
         JsonObject innerObject = new JsonObject();
         innerObject.addProperty("pageNo", pageNum += 1);
-        innerObject.addProperty("filterConvFac", TextUtils.join(",", filterConvFac));
-        innerObject.addProperty("filterSido", TextUtils.join(",", filterSido));
+        innerObject.addProperty("convFac", TextUtils.join(",", filterConvFac));
+        innerObject.addProperty("sido", TextUtils.join(",", filterSido));
+        innerObject.addProperty("type", TextUtils.join(",", filterType));
+        innerObject.addProperty("sex", TextUtils.join(",", filterSex));
 
         JsonObject bodyObject = new JsonObject();
         bodyObject.add("filter", innerObject);

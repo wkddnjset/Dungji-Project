@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="29dp"
+        android:layout_marginLeft="47dp"
+        android:layout_marginRight="47dp">
+
+        <ImageView
+            android:id="@+id/q_left"
+            android:layout_width="26dp"
+            android:layout_height="21dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/quotes_left"/>
+
+        <TextView
+            android:id="@+id/shelter_intro_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textColor="@color/grey_a0a0a0"
+            android:text=""
+            android:layout_toRightOf="@+id/q_left"
+            android:layout_toLeftOf="@+id/q_right"
+            android:layout_below="@+id/q_left"/>
+
+        <ImageView
+            android:id="@+id/q_right"
+            android:layout_width="26dp"
+            android:layout_height="21dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/shelter_intro_title"
+            android:src="@drawable/quotes_right"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/shelter_intro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="37dp"
+        android:layout_marginBottom="37dp"
+        android:layout_gravity="center"
+        android:textSize="15sp"
+        android:textColor="@color/grey_828282"
+        android:text=""/>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/grey_c8c8c8"/>
+</LinearLayout>

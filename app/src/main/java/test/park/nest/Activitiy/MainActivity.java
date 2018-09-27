@@ -3,7 +3,6 @@ package test.park.nest.Activitiy;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,7 +13,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,7 +23,6 @@ import com.matthewtamlin.sliding_intro_screen_library.DotIndicator;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import test.park.nest.Adapter.MainRecyclerAdapter;
@@ -33,7 +30,7 @@ import test.park.nest.Fragment.MainViewpagerFragment;
 import test.park.nest.Model.MainRecyclerModel;
 import test.park.nest.Network.RetrofitApiCallback;
 import test.park.nest.R;
-import test.park.nest.Search.SearchMainActivity;
+import test.park.nest.Activitiy.Search.SearchMainActivity;
 import test.park.nest.Utility.GpsUtil;
 
 public class MainActivity extends BaseActivity

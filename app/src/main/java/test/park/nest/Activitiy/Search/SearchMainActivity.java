@@ -1,4 +1,4 @@
-package test.park.nest.Search;
+package test.park.nest.Activitiy.Search;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
+import butterknife.BindBitmap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import test.park.nest.Adapter.search.SearchMainRecyclerAdapter;
@@ -36,6 +38,18 @@ public class SearchMainActivity extends BaseActivity implements View.OnClickList
     @BindView(R.id.search_text_btn)
     TextView mTxtSearchBtn;
 
+    @BindView(R.id.txt_all)
+    TextView mTxtSexAll;
+
+    @BindView(R.id.txt_man)
+    TextView mTxtSexMan;
+
+    @BindView(R.id.txt_woman)
+    TextView mTxtSexWoman;
+
+    @BindView(R.id.progress_type)
+    SeekBar mTypeProgress;
+
     private SearchMainRecyclerAdapter mAreaListAdapter;
     private SearchMainRecyclerAdapter mOptionListAdapter;
 
@@ -45,6 +59,9 @@ public class SearchMainActivity extends BaseActivity implements View.OnClickList
     private ArrayList<String> tagSidoList = new ArrayList<>();
     private ArrayList<String> tagConvFacList = new ArrayList<>();
 
+    private String tagSex = "";
+    private String tagType = "";
+
     private View.OnClickListener listViewItemClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -52,31 +69,83 @@ public class SearchMainActivity extends BaseActivity implements View.OnClickList
 
             SearchFilterModel data = (SearchFilterModel)v.getTag();
 
-            if(v.isSelected()){
-                v.setSelected(false);
 
-                if(data.getDataType() == 0){
-                    filterConvFac.remove((Object)data.getId());
-                    tagConvFacList.remove(data.getName());
+            if(data.getName().equals("전체")){
+
+                if(v.isSelected()){
+                    if(data.getDataType() == 0){
+
+                        filterConvFac.clear();
+                        tagConvFacList.clear();
+
+                        mOptionListAdapter.setAllSelect(false);
+                        mOptionListAdapter.notifyDataSetChanged();
+
+                    }else{
+                        filterSido.clear();
+                        tagSidoList.clear();
+
+                        mAreaListAdapter.setAllSelect(false);
+                        mAreaListAdapter.notifyDataSetChanged();
+                    }
+                }else{
+
+                    if(data.getDataType() == 0){
+                        filterConvFac.clear();
+                        tagConvFacList.clear();
+
+                        tagConvFacList.add("편의시설 전체");
+
+                        for(SearchFilterModel model : mOptionListAdapter.getDataList()){
+                            filterConvFac.add(model.getId());
+                        }
+
+                        mOptionListAdapter.setAllSelect(true);
+                        mOptionListAdapter.notifyDataSetChanged();
+
+                    }else{
+                        filterSido.clear();
+                        tagSidoList.clear();
+
+                        tagSidoList.add("지역 전체");
+
+                        for(SearchFilterModel model : mAreaListAdapter.getDataList()){
+                            filterSido.add(model.getId());
+                        }
+
+                        mAreaListAdapter.setAllSelect(true);
+                        mAreaListAdapter.notifyDataSetChanged();
+                    }
+                }
+
+            }else{
+                if(v.isSelected()){
+                    v.setSelected(false);
+
+                    if(data.getDataType() == 0){
+                        filterConvFac.remove((Object)data.getId());
+                        tagConvFacList.remove(data.getName());
+                    }
+                    else{
+                        filterSido.remove((Object)data.getId());
+                        tagSidoList.remove(data.getName());
+                    }
+
                 }
                 else{
-                    filterSido.remove((Object)data.getId());
-                    tagSidoList.remove(data.getName());
+                    v.setSelected(true);
+
+                    if(data.getDataType() == 0){
+                        filterConvFac.add(data.getId());
+                        tagConvFacList.add(data.getName());
+                    }
+
+                    else{
+                        filterSido.add(data.getId());
+                        tagSidoList.add(data.getName());
+                    }
                 }
 
-            }
-            else{
-                v.setSelected(true);
-
-                if(data.getDataType() == 0){
-                    filterConvFac.add(data.getId());
-                    tagConvFacList.add(data.getName());
-                }
-
-                else{
-                    filterSido.add(data.getId());
-                    tagSidoList.add(data.getName());
-                }
             }
 
         }
@@ -116,6 +185,44 @@ public class SearchMainActivity extends BaseActivity implements View.OnClickList
         mRecyclerOptionView.setAdapter(mOptionListAdapter);
 
         mTxtSearchBtn.setOnClickListener(this);
+
+        mTypeProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if(seekBar.getProgress() < 25){
+                    seekBar.setProgress(0);
+                    tagType = "일시";
+                }
+                else if(25 <= seekBar.getProgress() && seekBar.getProgress() < 75){
+                    seekBar.setProgress(50);
+                    tagType = "단기";
+                }
+                else{
+                    seekBar.setProgress(100);
+                    tagType = "중장기";
+                }
+            }
+        });
+
+        tagType = "일시";
+
+        mTxtSexAll.setSelected(true);
+
+        tagSex = "공용";
+
+        mTxtSexAll.setOnClickListener(this);
+        mTxtSexMan.setOnClickListener(this);
+        mTxtSexWoman.setOnClickListener(this);
 
         initCallData();
     }
@@ -183,8 +290,23 @@ public class SearchMainActivity extends BaseActivity implements View.OnClickList
 
                 JsonObject innerObject = new JsonObject();
                 innerObject.addProperty("pageNo", 1);
-                innerObject.addProperty("filterConvFac", TextUtils.join(",", filterConvFac));
-                innerObject.addProperty("filterSido", TextUtils.join(",", filterSido));
+                innerObject.addProperty("convFac", TextUtils.join(",", filterConvFac));
+                innerObject.addProperty("sido", TextUtils.join(",", filterSido));
+
+                if(tagType.equals("일시"))
+                    innerObject.addProperty("type", "1");
+                else if(tagType.equals("단기"))
+                    innerObject.addProperty("type", "2");
+                else
+                    innerObject.addProperty("type", "3");
+
+                if(tagSex.equals("남자"))
+                    innerObject.addProperty("sex", "1");
+                else if(tagSex.equals("여자"))
+                    innerObject.addProperty("sex", "2");
+                else
+                    innerObject.addProperty("sex", "3");
+
 
                 JsonObject bodyObject = new JsonObject();
                 bodyObject.add("filter", innerObject);
@@ -205,10 +327,16 @@ public class SearchMainActivity extends BaseActivity implements View.OnClickList
 
                         Intent intent = new Intent(SearchMainActivity.this, SearchResultActivity.class);
                         intent.putExtra("pageNum", 1);
+
                         intent.putExtra("filterConvFac", filterConvFac);
                         intent.putExtra("filterSido", filterSido);
+
                         intent.putExtra("tagConvFacList", tagConvFacList);
                         intent.putExtra("tagSidoList", tagSidoList);
+
+                        intent.putExtra("tagSex", tagSex);
+                        intent.putExtra("tagType", tagType);
+
                         intent.putExtra("result", (SearchResultModel)resultData);
                         startActivity(intent);
 
@@ -222,6 +350,37 @@ public class SearchMainActivity extends BaseActivity implements View.OnClickList
                     }
                 }, bodyObject);
 
+
+                break;
+
+
+            case R.id.txt_all:
+
+                mTxtSexAll.setSelected(true);
+                mTxtSexMan.setSelected(false);
+                mTxtSexWoman.setSelected(false);
+
+                tagSex = "공용";
+
+                break;
+
+            case R.id.txt_man:
+
+                mTxtSexAll.setSelected(false);
+                mTxtSexMan.setSelected(true);
+                mTxtSexWoman.setSelected(false);
+
+                tagSex = "남자";
+
+                break;
+
+            case R.id.txt_woman:
+
+                mTxtSexAll.setSelected(false);
+                mTxtSexMan.setSelected(false);
+                mTxtSexWoman.setSelected(true);
+
+                tagSex = "여자";
 
                 break;
 

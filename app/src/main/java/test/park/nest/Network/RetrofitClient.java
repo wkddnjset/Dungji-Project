@@ -115,10 +115,9 @@ public class RetrofitClient {
      *
      * @param header retrofit 에서 준 응답
      * @param type   파싱할 클래스
-     * @param data   data 부분에 실려오는 키값
      * @return
      */
-    private <T> T checkResponseData(ResponseHeaderModel header, Class<T> type, String data) {
+    private <T> T checkResponseData(ResponseHeaderModel header, Class<T> type) {
 
         Gson gson = new Gson();
 
@@ -151,7 +150,7 @@ public class RetrofitClient {
             public void onResponse(Call<ResponseHeaderModel> call, Response<ResponseHeaderModel> response) {
                 if (response.isSuccessful()) {
 
-                    Object result = checkResponseData(response.body(), SearchRecyclerModel.class, "filter");
+                    Object result = checkResponseData(response.body(), SearchRecyclerModel.class);
 
                     if (result != null)
                         callback.onSuccess(response.code(), result);
@@ -180,7 +179,7 @@ public class RetrofitClient {
             public void onResponse(Call<ResponseHeaderModel> call, Response<ResponseHeaderModel> response) {
                 if (response.isSuccessful()) {
 
-                    Object result = checkResponseData(response.body(), SearchResultModel.class, "shelter");
+                    Object result = checkResponseData(response.body(), SearchResultModel.class);
 
                     if (result != null)
                         callback.onSuccess(response.code(), result);
@@ -209,7 +208,7 @@ public class RetrofitClient {
                 Log.e("callPostMainResult", "onResponse");
 
                 if (response.isSuccessful()) {
-                    Object result = checkResponseData(response.body(), MainRecyclerModel.class, "data");
+                    Object result = checkResponseData(response.body(), MainRecyclerModel.class);
 
                     if (result != null)
                         callback.onSuccess(response.code(), result);

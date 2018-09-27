@@ -1,4 +1,4 @@
-package test.park.nest.Search;
+package test.park.nest.Activitiy.Search;
 
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
@@ -52,8 +52,9 @@ public class SearchResultActivity extends BaseActivity {
     private int pageNum = 1;
     private ArrayList<Integer> filterConvFac = new ArrayList<>();
     private ArrayList<Integer> filterSido = new ArrayList<>();
-    private ArrayList<Integer> filterType = new ArrayList<>();
-    private ArrayList<Integer> filterSex = new ArrayList<>();
+
+    private String tagSex = "";
+    private String tagType = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,11 +84,11 @@ public class SearchResultActivity extends BaseActivity {
 
             filterConvFac = getIntent().getIntegerArrayListExtra("filterConvFac");
             filterSido = getIntent().getIntegerArrayListExtra("filterSido");
-            filterType = getIntent().getIntegerArrayListExtra("filterType");
-            filterSex = getIntent().getIntegerArrayListExtra("filterSex");
+            tagSex = getIntent().getStringExtra("tagSex");
+            tagType = getIntent().getStringExtra("tagType");
 
-            tagList.addAll(getIntent().getStringArrayListExtra("tagSexList"));
-            tagList.addAll(getIntent().getStringArrayListExtra("tagTypeList"));
+            tagList.add(tagSex);
+            tagList.add(tagType);
             tagList.addAll(getIntent().getStringArrayListExtra("tagSidoList"));
             tagList.addAll(getIntent().getStringArrayListExtra("tagConvFacList"));
 
@@ -187,8 +188,21 @@ public class SearchResultActivity extends BaseActivity {
         innerObject.addProperty("pageNo", pageNum += 1);
         innerObject.addProperty("convFac", TextUtils.join(",", filterConvFac));
         innerObject.addProperty("sido", TextUtils.join(",", filterSido));
-        innerObject.addProperty("type", TextUtils.join(",", filterType));
-        innerObject.addProperty("sex", TextUtils.join(",", filterSex));
+
+        if(tagType.equals("일시"))
+            innerObject.addProperty("type", "1");
+        else if(tagType.equals("단기"))
+            innerObject.addProperty("type", "2");
+        else
+            innerObject.addProperty("type", "3");
+
+        if(tagSex.equals("남자"))
+            innerObject.addProperty("sex", "1");
+        else if(tagSex.equals("여자"))
+            innerObject.addProperty("sex", "2");
+        else
+            innerObject.addProperty("sex", "3");
+
 
         JsonObject bodyObject = new JsonObject();
         bodyObject.add("filter", innerObject);

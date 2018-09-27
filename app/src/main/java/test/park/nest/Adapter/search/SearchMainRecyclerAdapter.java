@@ -28,7 +28,7 @@ public class SearchMainRecyclerAdapter extends RecyclerView.Adapter<SearchMainRe
     // 0이면 지역용, 1이면 편의시설
     private int dataType = 0;
 
-
+    private boolean isAllSelect = false;
 
     @NonNull
     @Override
@@ -42,6 +42,10 @@ public class SearchMainRecyclerAdapter extends RecyclerView.Adapter<SearchMainRe
     @Override
     public void onBindViewHolder(@NonNull SearchMainViewHolder holder, int position) {
 
+        if(isAllSelect)
+            holder.itemView.setSelected(true);
+        else
+            holder.itemView.setSelected(false);
 
         dataList.get(position).setDataType(dataType);
         holder.filterName.setText(dataList.get(position).getName());
@@ -55,6 +59,10 @@ public class SearchMainRecyclerAdapter extends RecyclerView.Adapter<SearchMainRe
         this.dataList = dataList;
     }
 
+    public ArrayList<SearchFilterModel> getDataList() {
+        return dataList;
+    }
+
     public void setDataType(int dataType){
         this.dataType = dataType;
     }
@@ -63,6 +71,10 @@ public class SearchMainRecyclerAdapter extends RecyclerView.Adapter<SearchMainRe
         this.itemClickListener = itemClickListener;
     }
 
+
+    public void setAllSelect(boolean allSelect) {
+        isAllSelect = allSelect;
+    }
 
     @Override
     public int getItemCount() {

@@ -300,9 +300,9 @@ public class SearchMainActivity extends BaseActivity implements View.OnClickList
                 else
                     innerObject.addProperty("type", "3");
 
-                if(tagSex.equals("남자"))
+                if(tagSex.equals("여자"))
                     innerObject.addProperty("sex", "1");
-                else if(tagSex.equals("여자"))
+                else if(tagSex.equals("남자"))
                     innerObject.addProperty("sex", "2");
                 else
                     innerObject.addProperty("sex", "3");

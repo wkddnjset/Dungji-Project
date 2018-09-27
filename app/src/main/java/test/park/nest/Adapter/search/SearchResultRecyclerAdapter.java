@@ -64,10 +64,22 @@ public class SearchResultRecyclerAdapter extends RecyclerView.Adapter<SearchResu
                 .apply(new RequestOptions().transform(new RoundedCorners(10)))
                 .into(holder.shelterImageView);
 
-        holder.shelterName.setText(searchResultItems.get(position).getName());
+
         holder.shelterArea.setText(searchResultItems.get(position).getSidoName() + " " + searchResultItems.get(position).getGuGunName());
 
+        String shelterName = "";
 
+        if(searchResultItems.get(position).getSex() == 1){
+            shelterName += "[여자] ";
+
+        }else if(searchResultItems.get(position).getSex() == 2){
+            shelterName += "[남자] ";
+
+        }else{
+            shelterName += "[공용] ";
+        }
+
+        holder.shelterName.setText(shelterName + searchResultItems.get(position).getName());
 
         if(searchResultItems.get(position).getType() == 1){
 

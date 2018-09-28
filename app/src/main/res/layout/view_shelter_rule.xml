@@ -32,13 +32,13 @@
             android:src="@drawable/right"/>
 
 
-        <test.park.nest.Utility.CustomViewPager
+        <com.project.dungji.utility.CustomViewPager
             android:id="@+id/rule_pager"
             android:layout_width="0dp"
             android:layout_height="142dp"
             android:layout_weight="1">
 
-        </test.park.nest.Utility.CustomViewPager>
+        </com.project.dungji.utility.CustomViewPager>
 
         <ImageView
             android:id="@+id/rule_pager_left"

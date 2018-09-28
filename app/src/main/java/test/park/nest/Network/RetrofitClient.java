@@ -16,6 +16,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import test.park.nest.Model.MainRecyclerModel;
 import test.park.nest.Model.ResponseHeaderModel;
+import test.park.nest.Model.ShelterDetailModel;
 import test.park.nest.Model.search.SearchRecyclerModel;
 import test.park.nest.Model.search.SearchResultModel;
 
@@ -194,7 +195,7 @@ public class RetrofitClient {
 
             @Override
             public void onFailure(Call<ResponseHeaderModel> call, Throwable t) {
-
+                callback.onError(t);
             }
         });
     }
@@ -225,5 +226,32 @@ public class RetrofitClient {
 
             }
         });
+    }
+
+    public void callDetailShelterInfo(final  RetrofitApiCallback callback, JsonObject body){
+
+        apiService.callPostShelterDetail(body).enqueue(new Callback<ResponseHeaderModel>() {
+            @Override
+            public void onResponse(Call<ResponseHeaderModel> call, Response<ResponseHeaderModel> response) {
+
+                if (response.isSuccessful()) {
+                    Object result = checkResponseData(response.body(), ShelterDetailModel.class);
+
+                    if (result != null)
+                        callback.onSuccess(response.code(), result);
+                    else
+                        callback.onFailed(Integer.parseInt(response.body().getCode()), response.body().getMessage());
+
+                } else {
+                    callback.onFailed(response.code(), "네트워크 통신 에러");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseHeaderModel> call, Throwable t) {
+                callback.onError(t);
+            }
+        });
+
     }
 }

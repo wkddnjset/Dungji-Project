@@ -32,4 +32,9 @@ public interface RetrofitApiService {
     @Headers("Content-Type: application/json")
     @POST("api/page/main")
     Call<ResponseHeaderModel> callPostMainResult(@Body JsonObject body);
+
+
+    @Headers("Content-Type: application/json")
+    @POST("api/page/shelter/detail")
+    Call<ResponseHeaderModel> callPostShelterDetail(@Body JsonObject body);
 }

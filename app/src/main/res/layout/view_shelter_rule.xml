@@ -28,23 +28,23 @@
             android:id="@+id/rule_pager_right"
             android:layout_width="33dp"
             android:layout_height="33dp"
-            android:layout_marginRight="24dp"
+            android:layout_marginRight="20dp"
             android:src="@drawable/right"/>
 
 
-        <android.support.v4.view.ViewPager
+        <test.park.nest.Utility.CustomViewPager
             android:id="@+id/rule_pager"
-            android:layout_width="match_parent"
-            android:layout_height="132dp"
+            android:layout_width="0dp"
+            android:layout_height="142dp"
             android:layout_weight="1">
 
-        </android.support.v4.view.ViewPager>
+        </test.park.nest.Utility.CustomViewPager>
 
         <ImageView
             android:id="@+id/rule_pager_left"
             android:layout_width="33dp"
             android:layout_height="33dp"
-            android:layout_marginLeft="24dp"
+            android:layout_marginLeft="20dp"
             android:src="@drawable/left"/>
     </LinearLayout>
 

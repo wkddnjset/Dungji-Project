@@ -22,7 +22,7 @@
         android:layout_marginTop="13dp"
         android:layout_marginLeft="31dp"
         android:layout_marginRight="31dp"
-        android:layout_marginBottom="33dp">
+        android:layout_marginBottom="23dp">
 
     </android.support.v7.widget.RecyclerView>
 

@@ -26,6 +26,7 @@ public class IntroActivity extends BaseActivity {
 
         if (deniedList.size() == 0) {
             startActivity(new Intent(IntroActivity.this, MainActivity.class));
+            finish();
         } else {
             PermissionUtil.checkRequestPermission(IntroActivity.this, PermissionUtil.REQUEST_DUNGJI_PERMISSIONS);
         }

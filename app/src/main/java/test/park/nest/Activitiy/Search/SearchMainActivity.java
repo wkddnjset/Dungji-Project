@@ -95,10 +95,7 @@ public class SearchMainActivity extends BaseActivity implements View.OnClickList
                         tagConvFacList.clear();
 
                         tagConvFacList.add("편의시설 전체");
-
-                        for(SearchFilterModel model : mOptionListAdapter.getDataList()){
-                            filterConvFac.add(model.getId());
-                        }
+                        filterConvFac.add(data.getId());
 
                         mOptionListAdapter.setAllSelect(true);
                         mOptionListAdapter.notifyDataSetChanged();
@@ -108,10 +105,7 @@ public class SearchMainActivity extends BaseActivity implements View.OnClickList
                         tagSidoList.clear();
 
                         tagSidoList.add("지역 전체");
-
-                        for(SearchFilterModel model : mAreaListAdapter.getDataList()){
-                            filterSido.add(model.getId());
-                        }
+                        filterSido.add(data.getId());
 
                         mAreaListAdapter.setAllSelect(true);
                         mAreaListAdapter.notifyDataSetChanged();

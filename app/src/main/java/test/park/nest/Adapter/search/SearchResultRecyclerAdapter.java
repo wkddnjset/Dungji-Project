@@ -35,6 +35,7 @@ public class SearchResultRecyclerAdapter extends RecyclerView.Adapter<SearchResu
         this.context = context;
     }
 
+    private View.OnClickListener itemClickListener;
 
     @NonNull
     @Override
@@ -97,6 +98,8 @@ public class SearchResultRecyclerAdapter extends RecyclerView.Adapter<SearchResu
             holder.shelterType.setTextColor(context.getResources().getColor(R.color.blue_0068b7));
         }
 
+        holder.itemView.setOnClickListener(itemClickListener);
+        holder.itemView.setTag(searchResultItems.get(position).getId());
     }
 
     @Override
@@ -109,7 +112,9 @@ public class SearchResultRecyclerAdapter extends RecyclerView.Adapter<SearchResu
         this.searchResultItems = searchResultItems;
     }
 
-
+    public void setItemClickListener(View.OnClickListener itemClickListener){
+        this.itemClickListener = itemClickListener;
+    }
 
     public class SearchResultViewHolder extends RecyclerView.ViewHolder{
 

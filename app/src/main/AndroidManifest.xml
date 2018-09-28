@@ -30,9 +30,12 @@
             android:screenOrientation="portrait" />
 
 
-        <activity android:name=".Activitiy.Search.SearchMainActivity" />
-        <activity android:name=".Activitiy.Search.SearchResultActivity" />
-
+        <activity android:name=".Activitiy.Search.SearchMainActivity"
+                  android:screenOrientation="portrait" />
+        <activity android:name=".Activitiy.Search.SearchResultActivity"
+                  android:screenOrientation="portrait" />
+        <activity android:name=".Activitiy.ShelterDetailActivity"
+                  android:screenOrientation="portrait" />
     </application>
 
 </manifest>

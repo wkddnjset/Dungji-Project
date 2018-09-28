@@ -1,5 +1,6 @@
 package test.park.nest.Activitiy.Search;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import test.park.nest.Activitiy.ShelterDetailActivity;
 import test.park.nest.Adapter.search.SearchResultRecyclerAdapter;
 import test.park.nest.Activitiy.BaseActivity;
 import test.park.nest.Model.search.SearchResultModel;
@@ -56,6 +58,20 @@ public class SearchResultActivity extends BaseActivity {
     private String tagSex = "";
     private String tagType = "";
 
+
+    private View.OnClickListener moveDetailListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int shelterId = (int)v.getTag();
+
+            Intent intent = new Intent(SearchResultActivity.this, ShelterDetailActivity.class);
+            intent.putExtra("shelterId", shelterId);
+            startActivity(intent);
+
+        }
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -72,7 +88,7 @@ public class SearchResultActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         resultAdapter = new SearchResultRecyclerAdapter(this);
-
+        resultAdapter.setItemClickListener(moveDetailListener);
 
         mSearchResultItemList.setLayoutManager(new GridLayoutManager(this, 2));
         mSearchResultItemList.setAdapter(resultAdapter);

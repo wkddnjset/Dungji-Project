@@ -34,6 +34,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
     //RecyclerView
     compileOnly 'com.android.support:recyclerview-v7:27.1.0'
+    implementation 'com.android.support:cardview-v7:27.1.0'
 
 
 

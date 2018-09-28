@@ -23,7 +23,13 @@
         <item name="android:gravity">center</item>
     </style>
 
-
+    <style name="CustomProgressBarHorizontal" parent="android:Widget.Holo.ProgressBar.Horizontal">
+        <item name="android:progressTint">@color/blue_2ac1bc</item>
+        <item name="android:minHeight">10dip</item>
+        <item name="android:maxHeight">20dip</item>
+        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:progressBackgroundTint">@color/grey_7c7c7c</item>
+    </style>
 
     <style name="ProgressDialogTheme">
         <item name="windowNoTitle">true</item>

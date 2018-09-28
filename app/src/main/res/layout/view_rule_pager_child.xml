@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="132dp"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    card_view:cardCornerRadius="6dp"
+    card_view:cardElevation="7dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+
+        <TextView
+            android:id="@+id/rule_child_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="29dp"
+            android:textSize="17sp"
+            android:textColor="@color/blue_2ac1bc"
+            android:text="규칙 제목"/>
+
+
+        <TextView
+            android:id="@+id/rule_child_context"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:gravity="center"
+            android:textColor="@color/grey_969696"
+            android:layout_marginBottom="33dp"
+            android:layout_marginRight="13dp"
+            android:layout_marginLeft="13dp"
+            android:text="규칙 내용"/>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
+

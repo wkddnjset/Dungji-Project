@@ -17,15 +17,19 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.matthewtamlin.sliding_intro_screen_library.DotIndicator;
+import com.project.dungji.R;
+import com.project.dungji.model.ShelterDetailModel;
+import com.project.dungji.model.detail.DetailConvFacItem;
+import com.project.dungji.utility.CustomViewPager;
+
+import net.daum.mf.map.api.MapPOIItem;
+import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapView;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.project.dungji.model.ShelterDetailModel;
-import com.project.dungji.model.detail.DetailConvFacItem;
-import com.project.dungji.R;
-import com.project.dungji.utility.CustomViewPager;
 
 public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -93,7 +97,7 @@ public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.
             ((ShelterBannerView)holder).shelterPagerDot.setNumberOfItems(shelterDetailData.getImages().size());
 
             ((ShelterBannerView)holder).shelterName.setText(shelterDetailData.getDetailInfoItem().getName());
-            ((ShelterBannerView)holder).shelterAddr.setText(shelterDetailData.getDetailInfoItem().getSidoName());
+            ((ShelterBannerView)holder).shelterAddr.setText(shelterDetailData.getDetailInfoItem().getSidoName() + " " + shelterDetailData.getDetailInfoItem().getGuGunName());
 
             if(shelterDetailData.getDetailInfoItem().getType() == 1){
 
@@ -160,7 +164,14 @@ public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.
         }
 
         else{
+
+            MapPoint shelterLocate = MapPoint.mapPointWithGeoCoord(Double.parseDouble(shelterDetailData.getDetailInfoItem().getLatitude()),
+                    Double.parseDouble(shelterDetailData.getDetailInfoItem().getLongitude()));
+
             ((ShelterLocationView)holder).shelterAddr.setText(shelterDetailData.getDetailInfoItem().getAddress());
+
+            ((ShelterLocationView)holder).setMarkerData(shelterDetailData.getDetailInfoItem().getName(), shelterLocate);
+
         }
     }
 
@@ -454,10 +465,81 @@ public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.
         @BindView(R.id.shelter_addr)
         TextView shelterAddr;
 
-        public ShelterLocationView(View itemView) {
+        @BindView(R.id.map_view)
+        ViewGroup mapViewContainer;
+
+        MapView mapView;
+
+        public ShelterLocationView(final View itemView) {
             super(itemView);
 
             ButterKnife.bind(this, itemView);
+
+            if(mapView == null){
+                mapView = new MapView(context);
+                mapView.setMapViewEventListener(new MapView.MapViewEventListener() {
+                    @Override
+                    public void onMapViewInitialized(MapView mapView) {
+                    }
+
+                    @Override
+                    public void onMapViewCenterPointMoved(MapView mapView, MapPoint mapPoint) {
+
+                    }
+
+                    @Override
+                    public void onMapViewZoomLevelChanged(MapView mapView, int i) {
+
+                    }
+
+                    @Override
+                    public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) {
+
+                    }
+
+                    @Override
+                    public void onMapViewDoubleTapped(MapView mapView, MapPoint mapPoint) {
+
+                    }
+
+                    @Override
+                    public void onMapViewLongPressed(MapView mapView, MapPoint mapPoint) {
+
+                    }
+
+                    @Override
+                    public void onMapViewDragStarted(MapView mapView, MapPoint mapPoint) {
+                        itemView.getParent().requestDisallowInterceptTouchEvent(true);
+                    }
+
+                    @Override
+                    public void onMapViewDragEnded(MapView mapView, MapPoint mapPoint) {
+
+                    }
+
+                    @Override
+                    public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
+                        itemView.getParent().requestDisallowInterceptTouchEvent(false);
+                    }
+                });
+            }
+
+            mapViewContainer.addView(mapView);
         }
+
+        public void setMarkerData(String title, MapPoint point){
+            MapPOIItem marker = new MapPOIItem();
+            marker.setMarkerType(MapPOIItem.MarkerType.BluePin);
+            marker.setSelectedMarkerType(MapPOIItem.MarkerType.RedPin);
+            marker.setItemName(title);
+            marker.setMapPoint(point);
+
+            if(mapView != null){
+                mapView.setMapCenterPointAndZoomLevel(point, 3, false);
+                mapView.addPOIItem(marker);
+            }
+
+        }
+
     }
 }

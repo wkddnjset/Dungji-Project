@@ -24,4 +24,12 @@
         android:textColor="@color/grey_b4b4b4"
         android:text="쉼터위치"/>
 
+    <RelativeLayout
+        android:id="@+id/map_view"
+        android:layout_width="match_parent"
+        android:layout_height="132dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="23dp"
+        android:layout_marginRight="23dp"
+        android:layout_marginBottom="23dp"/>
 </LinearLayout>

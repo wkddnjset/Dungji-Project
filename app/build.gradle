@@ -8,6 +8,7 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         ndk {
@@ -15,6 +16,12 @@ android {
         }
     }
 
+    useLibrary 'org.apache.http.legacy'
+
+    sourceSets.main {
+        jni.srcDirs = []
+        jniLibs.srcDir 'src/main/libs'
+    }
 
     signingConfigs {
         debug {
@@ -47,6 +54,11 @@ android {
             minifyEnabled true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                variant.outputs.all{ output ->
+                    outputFileName = "doungji_google-${versionName}.apk"
+                }
+            }
         }
     }
 }

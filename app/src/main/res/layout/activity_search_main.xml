@@ -104,7 +104,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/CustomProgressBarHorizontal"
-                    android:max="100"
+                    android:max="3"
                     android:progress="0"/>
 
                 <LinearLayout
@@ -117,6 +117,16 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:paddingLeft="10dp"
+                        android:textSize="10sp"
+                        android:text="전체"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingRight="15dp"
+                        android:gravity="center"
                         android:textSize="10sp"
                         android:text="일시"/>
 
@@ -125,6 +135,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
+                        android:paddingLeft="20dp"
                         android:textSize="10sp"
                         android:text="단기"/>
 

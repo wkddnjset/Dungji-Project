@@ -192,16 +192,16 @@ public class SearchMainActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                if(seekBar.getProgress() < 25){
-                    seekBar.setProgress(0);
+                if(seekBar.getProgress() == 0){
+                    tagType = "타입 전체";
+                }
+                else if(seekBar.getProgress() == 1){
                     tagType = "일시";
                 }
-                else if(25 <= seekBar.getProgress() && seekBar.getProgress() < 75){
-                    seekBar.setProgress(50);
+                else if(seekBar.getProgress() == 2){
                     tagType = "단기";
                 }
-                else{
-                    seekBar.setProgress(100);
+                else {
                     tagType = "중장기";
                 }
             }
@@ -290,8 +290,10 @@ public class SearchMainActivity extends BaseActivity implements View.OnClickList
                     innerObject.addProperty("type", "1");
                 else if(tagType.equals("단기"))
                     innerObject.addProperty("type", "2");
-                else
+                else if(tagType.equals("중장기"))
                     innerObject.addProperty("type", "3");
+                else
+                    innerObject.addProperty("type", "0");
 
                 if(tagSex.equals("여자"))
                     innerObject.addProperty("sex", "1");

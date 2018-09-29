@@ -1,33 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_margin="10dp"
-    android:id="@+id/item_main_recy_ll">
+    android:layout_marginBottom="14dp"
+    android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/item_main_recy_img"
+        android:id="@+id/main_item_image"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_margin="10dp"
         android:scaleType="fitXY"
-        android:src="@drawable/banner"/>
-    <TextView
-        android:id="@+id/item_main_recy_guGunName"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:textSize="10sp"/>
-    <TextView
-        android:id="@+id/item_main_recy_name"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:textSize="13sp"/>
-    <TextView
-        android:id="@+id/item_main_recy_address"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:textSize="10sp"/>
+        android:layout_height="97dp"
+        android:layout_marginBottom="8dp"/>
 
 
+    <TextView
+        android:id="@+id/main_shelter_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:lineSpacingExtra="2.3sp"
+        android:text="쉼터 종류"
+        android:textColor="@color/green_86c894"
+        android:textSize="8dp"/>
+
+    <TextView
+        android:id="@+id/main_shelter_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/black_232323"
+        android:text="쉼터 이름"
+        android:layout_marginBottom="4dp"/>
+
+    <TextView
+        android:id="@+id/main_shelter_area"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="11sp"
+        android:textColor="@color/grey_7c7c7c"
+        android:lineSpacingExtra="4sp"
+        android:text="쉼터 위치"/>
 </LinearLayout>

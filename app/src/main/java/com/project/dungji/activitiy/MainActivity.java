@@ -10,12 +10,15 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.gson.JsonObject;
@@ -25,9 +28,12 @@ import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import com.project.dungji.activitiy.search.SearchResultActivity;
 import com.project.dungji.adapter.MainRecyclerAdapter;
 import com.project.dungji.fragment.MainViewpagerFragment;
 import com.project.dungji.model.MainRecyclerModel;
+import com.project.dungji.model.search.SearchResultModel;
 import com.project.dungji.network.RetrofitApiCallback;
 import com.project.dungji.R;
 import com.project.dungji.activitiy.search.SearchMainActivity;
@@ -37,10 +43,11 @@ public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, ViewPager.OnPageChangeListener {
 
 
-    private StaggeredGridLayoutManager mLayoutManager;
+    private GridLayoutManager mLayoutManager;
     private MainRecyclerAdapter mMainRecyclerAdapter;
 
     private ArrayList<MainRecyclerModel.bannerItem> bannerList = null;
+    private ArrayList<MainRecyclerModel.shelterItem> shelterList = new ArrayList<>();
     RecyclerView mRecyclerView;
 
     ViewPager mViewPager;
@@ -49,14 +56,40 @@ public class MainActivity extends BaseActivity
 
     DotIndicator mDotIndicator;
 
+    NestedScrollView mScrollView;
 
     DrawerLayout drawer;
     NavigationView navigationView;
+
+
+    private boolean isLoad = false;
+    private boolean isAllData = false;
+
+    private int totalCount = 0;
+
+    private int pageNum = 0;
+
 
     private ActionBarDrawerToggle toggle;
 
 
     Unbinder unbinder;
+
+
+
+    private View.OnClickListener moveDetailListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int shelterId = (int)v.getTag();
+
+            Intent intent = new Intent(MainActivity.this, ShelterDetailActivity.class);
+            intent.putExtra("shelterId", shelterId);
+            startActivity(intent);
+
+        }
+    };
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,35 +107,57 @@ public class MainActivity extends BaseActivity
 
     private void initLayout() {
 
+        mScrollView = findViewById(R.id.main_scroll);
         mRecyclerView = findViewById(R.id.recyclerView);
         mViewPager = findViewById(R.id.pager);
         mDotIndicator = findViewById(R.id.DotIndicator);
         navigationView = findViewById(R.id.nav_view);
         drawer = findViewById(R.id.drawer_layout);
 
-//        toggle = new ActionBarDrawerToggle(this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.addDrawerListener(toggle);
-//        toggle.syncState();
-
-
         mMainRecyclerAdapter = new MainRecyclerAdapter(MainActivity.this);
+        mMainRecyclerAdapter.setItemClick(moveDetailListener);
 
-        mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        mLayoutManager = new GridLayoutManager(this, 2);
         mLayoutManager.setItemPrefetchEnabled(true);
 
 
-        mDotIndicator.setSelectedDotColor(Color.parseColor("#ff5580"));
-        mDotIndicator.setUnselectedDotColor(Color.parseColor("#dadada"));
+        mDotIndicator.setSelectedDotColor(Color.parseColor("#ffffff"));
+        mDotIndicator.setUnselectedDotColor(Color.parseColor("#a5dddb"));
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mMainRecyclerAdapter);
+        mRecyclerView.setNestedScrollingEnabled(false);
+
+
+
+        mScrollView.getParent().requestChildFocus(mScrollView, mScrollView);
+        mScrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                switch (event.getActionMasked()) {
+
+                    case MotionEvent.ACTION_UP:
+
+                        if(!mScrollView.canScrollVertically(1)){
+                            if(!isLoad && !isAllData)
+                                dataset();
+                        }
+
+                        break;
+                }
+
+                return false;
+            }
+        });
+
     }
 
     private void initListener() {
         setLeftIconClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                drawer.openDrawer(Gravity.LEFT);
+//                drawer.openDrawer(Gravity.LEFT);
             }
         });
 
@@ -121,12 +176,18 @@ public class MainActivity extends BaseActivity
 
     private void dataset() {
 
+
+        if(isAllData)
+            return;
+
+        isLoad = true;
+
         GpsUtil gpsInfo = new GpsUtil(MainActivity.this);
 
         JsonObject innerObject = new JsonObject();
-        innerObject.addProperty("longitude", gpsInfo.getLongitude());
-        innerObject.addProperty("latitude", gpsInfo.getLatitude());
-        innerObject.addProperty("pageNo", 10);
+        innerObject.addProperty("longitude", String.valueOf(gpsInfo.getLongitude()));
+        innerObject.addProperty("latitude", String.valueOf(gpsInfo.getLatitude()));
+        innerObject.addProperty("pageNo", pageNum += 1);
 
         JsonObject bodyObject = new JsonObject();
         bodyObject.add("shelter", innerObject);
@@ -136,6 +197,7 @@ public class MainActivity extends BaseActivity
             @Override
             public void onError(Throwable t) {
                 mProgressDialog.dismiss();
+                isLoad = false;
             }
 
             @Override
@@ -143,8 +205,31 @@ public class MainActivity extends BaseActivity
                 mProgressDialog.dismiss();
 
 
-                mMainRecyclerAdapter.setDataList(((MainRecyclerModel) resultData).getShelterSimpleList());
-                mMainRecyclerAdapter.notifyDataSetChanged();
+                totalCount = ((MainRecyclerModel) resultData).getCount();
+
+                shelterList.addAll(((MainRecyclerModel) resultData).getShelterSimpleList());
+
+                if(totalCount == 0 ||
+                        totalCount == shelterList.size())
+                    isAllData = true;
+                else
+                    isAllData = false;
+
+
+                int startIndex = shelterList.size();
+
+                if(((MainRecyclerModel) resultData).getShelterSimpleList().size() == shelterList.size()){
+
+                    mMainRecyclerAdapter.setDataList(shelterList);
+                    mMainRecyclerAdapter.notifyDataSetChanged();
+                }
+                else
+                    mMainRecyclerAdapter.notifyItemRangeInserted(startIndex, ((MainRecyclerModel) resultData).getShelterSimpleList().size());
+
+
+
+                if(bannerList != null && bannerList.size() > 0)
+                    bannerList.clear();
 
                 bannerList = ((MainRecyclerModel) resultData).getBannerList();
 
@@ -154,12 +239,14 @@ public class MainActivity extends BaseActivity
 
                 mDotIndicator.setNumberOfItems(bannerList.size());
 
+                isLoad = false;
 
             }
 
             @Override
             public void onFailed(int code, String msg) {
                 mProgressDialog.dismiss();
+                isLoad = false;
 
             }
         }, bodyObject);
@@ -230,10 +317,6 @@ public class MainActivity extends BaseActivity
         return R.layout.activity_main;
     }
 
-
-    protected int getLeftIconRes() {
-        return R.drawable.menu;
-    }
 
     protected int getRightIconRes() {
         return R.drawable.search;

@@ -207,7 +207,7 @@ public class SearchMainActivity extends BaseActivity implements View.OnClickList
             }
         });
 
-        tagType = "일시";
+        tagType = "전체";
 
         mTxtSexAll.setSelected(true);
 

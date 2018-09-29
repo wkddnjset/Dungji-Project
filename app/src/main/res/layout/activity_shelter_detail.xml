@@ -38,7 +38,7 @@
             android:layout_toLeftOf="@+id/shelter_bottom_chat"
             android:layout_alignParentRight="true"
             android:layout_marginRight="25dp"
-            android:src="@drawable/back"/>
+            android:src="@drawable/callbtn"/>
 
         <ImageView
             android:id="@+id/shelter_bottom_chat"

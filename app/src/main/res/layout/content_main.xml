@@ -9,8 +9,10 @@
     tools:showIn="@layout/app_bar_main">
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/main_scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -22,27 +24,34 @@
                 android:layout_height="110dp"
                 android:layout_gravity="top" />
 
-            <RelativeLayout
+            <com.matthewtamlin.sliding_intro_screen_library.DotIndicator
+                android:id="@+id/DotIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignBottom="@+id/pager"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/main_info_text"
                 android:layout_width="match_parent"
-                android:layout_height="30dp">
-
-                <com.matthewtamlin.sliding_intro_screen_library.DotIndicator
-                    android:id="@+id/DotIndicator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerInParent="true"
-                    android:layout_gravity="center" />
-
-            </RelativeLayout>
-
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pager"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="16dp"
+                android:text="가장 가까운 쉼터를 찾아보세요"
+                android:textColor="@color/black_232323"
+                android:textSize="17sp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
-                android:layout_below="@+id/pager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </android.support.v7.widget.RecyclerView>
+                android:layout_height="match_parent"
+                android:layout_below="@+id/main_info_text"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="16dp"></android.support.v7.widget.RecyclerView>
 
         </RelativeLayout>
 

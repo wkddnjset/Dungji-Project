@@ -23,6 +23,9 @@ public class DetailInfoItem {
     @SerializedName("introduction")
     private String introduction = "";
 
+    @SerializedName("intro_title")
+    private String intro_title = "";
+
     @SerializedName("longitude")
     private String longitude = "";
 
@@ -41,6 +44,14 @@ public class DetailInfoItem {
     @SerializedName("sex")
     private int sex = 0;
 
+
+    public String getIntro_title() {
+        return intro_title;
+    }
+
+    public void setIntro_title(String intro_title) {
+        this.intro_title = intro_title;
+    }
 
     public int getId() {
         return id;

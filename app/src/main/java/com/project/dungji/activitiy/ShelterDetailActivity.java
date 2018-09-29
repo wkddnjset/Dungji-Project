@@ -5,18 +5,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.JsonObject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.project.dungji.R;
 import com.project.dungji.adapter.ShelterDetailViewAdapter;
 import com.project.dungji.model.ShelterDetailModel;
 import com.project.dungji.network.RetrofitApiCallback;
-import com.project.dungji.R;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ShelterDetailActivity extends BaseActivity implements View.OnClickListener {
 
@@ -35,7 +36,6 @@ public class ShelterDetailActivity extends BaseActivity implements View.OnClickL
     private String callNumber;
 
     private ShelterDetailViewAdapter detailViewAdapter;
-
 
     @Override
     protected int getContentView() {
@@ -64,7 +64,6 @@ public class ShelterDetailActivity extends BaseActivity implements View.OnClickL
 
         super.onCreate(savedInstanceState);
 
-
         ButterKnife.bind(this);
 
 
@@ -75,7 +74,22 @@ public class ShelterDetailActivity extends BaseActivity implements View.OnClickL
 
         detailViewAdapter = new ShelterDetailViewAdapter();
         shelterDetailView.setAdapter(detailViewAdapter);
+        shelterDetailView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
 
+                if(recyclerView.getChildCount() - 1 == ((LinearLayoutManager) shelterDetailView.getLayoutManager()).findLastVisibleItemPosition())
+                    detailViewAdapter.refreshMapView(recyclerView.findViewHolderForAdapterPosition(recyclerView.getChildCount() - 1));
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+
+            }
+        });
         bottomCall.setOnClickListener(this);
 
         initCallData();

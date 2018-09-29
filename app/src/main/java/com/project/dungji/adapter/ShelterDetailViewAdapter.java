@@ -2,16 +2,23 @@ package com.project.dungji.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.Surface;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -75,119 +82,161 @@ public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 return new ShelterRuleView(v);
 
 
-            default:
+            case VIEW_LOCATION:
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_shelter_location, parent, false);
                 return new ShelterLocationView(v);
         }
+        return null;
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
-        if(shelterDetailData == null)
+        if (shelterDetailData == null || holder == null)
             return;
 
-        if(holder instanceof ShelterBannerView){
+        if (holder instanceof ShelterBannerView) {
 
             DetailBannerPagerAdapter adapter = new DetailBannerPagerAdapter(((AppCompatActivity) context).getSupportFragmentManager(), shelterDetailData.getImages());
 
-            ((ShelterBannerView)holder).shelterPager.setAdapter(adapter);
+            ((ShelterBannerView) holder).shelterPager.setAdapter(adapter);
             adapter.notifyDataSetChanged();
 
-            ((ShelterBannerView)holder).shelterPagerDot.setNumberOfItems(shelterDetailData.getImages().size());
+            ((ShelterBannerView) holder).shelterPagerDot.setNumberOfItems(shelterDetailData.getImages().size());
 
-            ((ShelterBannerView)holder).shelterName.setText(shelterDetailData.getDetailInfoItem().getName());
-            ((ShelterBannerView)holder).shelterAddr.setText(shelterDetailData.getDetailInfoItem().getSidoName() + " " + shelterDetailData.getDetailInfoItem().getGuGunName());
+            ((ShelterBannerView) holder).shelterName.setText(shelterDetailData.getDetailInfoItem().getName());
+            ((ShelterBannerView) holder).shelterAddr.setText(shelterDetailData.getDetailInfoItem().getSidoName() + " " + shelterDetailData.getDetailInfoItem().getGuGunName());
 
-            if(shelterDetailData.getDetailInfoItem().getType() == 1){
+            if (shelterDetailData.getDetailInfoItem().getType() == 1) {
 
-                ((ShelterBannerView)holder).shelterType.setText("일시 쉼터");
-                ((ShelterBannerView)holder).shelterType.setTextColor(context.getResources().getColor(R.color.green_86c894));
+                ((ShelterBannerView) holder).shelterType.setText("일시 쉼터");
+                ((ShelterBannerView) holder).shelterType.setTextColor(context.getResources().getColor(R.color.green_86c894));
 
-            }else if (shelterDetailData.getDetailInfoItem().getType() == 2) {
+            } else if (shelterDetailData.getDetailInfoItem().getType() == 2) {
 
-                ((ShelterBannerView)holder).shelterType.setText("단기 쉼터");
-                ((ShelterBannerView)holder).shelterType.setTextColor(context.getResources().getColor(R.color.red_eb6877));
+                ((ShelterBannerView) holder).shelterType.setText("단기 쉼터");
+                ((ShelterBannerView) holder).shelterType.setTextColor(context.getResources().getColor(R.color.red_eb6877));
 
-            }else {
-                ((ShelterBannerView)holder).shelterType.setText("중장기 쉼터");
-                ((ShelterBannerView)holder).shelterType.setTextColor(context.getResources().getColor(R.color.blue_0068b7));
+            } else {
+                ((ShelterBannerView) holder).shelterType.setText("중장기 쉼터");
+                ((ShelterBannerView) holder).shelterType.setTextColor(context.getResources().getColor(R.color.blue_0068b7));
             }
 
-            ((ShelterBannerView)holder).shelterPeople.setText(shelterDetailData.getDetailInfoItem().getRemain_ppl() + "명");
-        }
-
-        else if(holder instanceof ShelterIntroduceView){
+            ((ShelterBannerView) holder).shelterPeople.setText(shelterDetailData.getDetailInfoItem().getRemain_ppl() + "명");
+        } else if (holder instanceof ShelterIntroduceView) {
 
 
-            if(TextUtils.isEmpty(shelterDetailData.getDetailInfoItem().getIntroduction()))
-                ((ShelterIntroduceView)holder).itemView.setVisibility(View.GONE);
+            if (TextUtils.isEmpty(shelterDetailData.getDetailInfoItem().getIntroduction()))
+                ((ShelterIntroduceView) holder).itemView.setVisibility(View.GONE);
 
             else {
-                ((ShelterIntroduceView)holder).itemView.setVisibility(View.VISIBLE);
+                ((ShelterIntroduceView) holder).itemView.setVisibility(View.VISIBLE);
 
-                ((ShelterIntroduceView)holder).shelterIntroTitle.setText(shelterDetailData.getDetailInfoItem().getName() +"에서는\n항상 여러분을 기다리고 있습니다.");
-                ((ShelterIntroduceView)holder).shelterIntroContent.setText(shelterDetailData.getDetailInfoItem().getIntroduction());
+                ((ShelterIntroduceView) holder).shelterIntroTitle.setText(shelterDetailData.getDetailInfoItem().getIntro_title());
+                ((ShelterIntroduceView) holder).shelterIntroContent.setText(shelterDetailData.getDetailInfoItem().getIntroduction());
             }
 
 
-        }
+        } else if (holder instanceof ShelterFacilView) {
 
-        else if(holder instanceof ShelterFacilView){
+            if (shelterDetailData.getConvFacs() == null || shelterDetailData.getConvFacs().size() <= 0) {
+                ((ShelterFacilView) holder).itemView.setVisibility(View.GONE);
 
-            if(shelterDetailData.getConvFacs() == null || shelterDetailData.getConvFacs().size() <= 0){
-                ((ShelterFacilView)holder).itemView.setVisibility(View.GONE);
-
-            }else{
-                ((ShelterFacilView)holder).itemView.setVisibility(View.VISIBLE);
-                ((ShelterFacilView)holder).adapter.setItems(shelterDetailData.getConvFacs());
-                ((ShelterFacilView)holder).adapter.notifyDataSetChanged();
+            } else {
+                ((ShelterFacilView) holder).itemView.setVisibility(View.VISIBLE);
+                ((ShelterFacilView) holder).adapter.setItems(shelterDetailData.getConvFacs());
+                ((ShelterFacilView) holder).adapter.notifyDataSetChanged();
             }
 
-        }
+        } else if (holder instanceof ShelterRuleView) {
 
-        else if(holder instanceof ShelterRuleView){
+            if (shelterDetailData.getRules().size() <= 0) {
+                ((ShelterRuleView) holder).itemView.setVisibility(View.GONE);
 
-            if(shelterDetailData.getRules().size() <= 0){
-                ((ShelterRuleView)holder).itemView.setVisibility(View.GONE);
+            } else {
 
-            }else{
-
-                ((ShelterRuleView)holder).itemView.setVisibility(View.VISIBLE);
+                ((ShelterRuleView) holder).itemView.setVisibility(View.VISIBLE);
 
                 DetailRulePagerAdapter adapter = new DetailRulePagerAdapter(((AppCompatActivity) context).getSupportFragmentManager(), shelterDetailData.getRules());
 
-                ((ShelterRuleView)holder).rulePager.setAdapter(adapter);
+                ((ShelterRuleView) holder).rulePager.setAdapter(adapter);
             }
 
 
-        }
-
-        else{
+        } else if(holder instanceof ShelterLocationView) {
 
             MapPoint shelterLocate = MapPoint.mapPointWithGeoCoord(Double.parseDouble(shelterDetailData.getDetailInfoItem().getLatitude()),
                     Double.parseDouble(shelterDetailData.getDetailInfoItem().getLongitude()));
 
-            ((ShelterLocationView)holder).shelterAddr.setText(shelterDetailData.getDetailInfoItem().getAddress());
+            ((ShelterLocationView) holder).shelterAddr.setText(shelterDetailData.getDetailInfoItem().getAddress());
+//
+//            mapView = new MapView(context);
+//
+//            MapPOIItem marker = new MapPOIItem();
+//            marker.setMarkerType(MapPOIItem.MarkerType.BluePin);
+//            marker.setSelectedMarkerType(MapPOIItem.MarkerType.RedPin);
+//            marker.setItemName(shelterDetailData.getDetailInfoItem().getName());
+//            marker.setMapPoint(shelterLocate);
+//
+//            ((ShelterLocationView) holder).mapViewContainer.removeAllViews();
+//            ((ShelterLocationView) holder).mapViewContainer.addView(mapView);
+//
+//            mapView.setMapCenterPointAndZoomLevel(shelterLocate, 3, false);
+//            mapView.removeAllPOIItems();
+//            mapView.addPOIItem(marker);
 
-            ((ShelterLocationView)holder).setMarkerData(shelterDetailData.getDetailInfoItem().getName(), shelterLocate);
+
 
         }
     }
 
+    MapView mapView;
+
+    public void refreshMapView(RecyclerView.ViewHolder viewHolder){
+
+//        if(viewHolder instanceof ShelterLocationView){
+//
+//            MapPoint shelterLocate = MapPoint.mapPointWithGeoCoord(Double.parseDouble(shelterDetailData.getDetailInfoItem().getLatitude()),
+//                    Double.parseDouble(shelterDetailData.getDetailInfoItem().getLongitude()));
+//
+//            if(mapView != null){
+//                mapView = null;
+//            }
+//
+//            mapView = new MapView(context);
+//
+//            MapPOIItem marker = new MapPOIItem();
+//            marker.setMarkerType(MapPOIItem.MarkerType.BluePin);
+//            marker.setSelectedMarkerType(MapPOIItem.MarkerType.RedPin);
+//            marker.setItemName(shelterDetailData.getDetailInfoItem().getName());
+//            marker.setMapPoint(shelterLocate);
+//
+//            mapView.setMapCenterPointAndZoomLevel(shelterLocate, 3, false);
+//            mapView.removeAllPOIItems();
+//            mapView.addPOIItem(marker);
+//
+//            ((ShelterLocationView) viewHolder).mapViewContainer.removeAllViews();
+//            ((ShelterLocationView) viewHolder).mapViewContainer.addView(mapView);
+//
+//
+//        }
+
+    }
 
     @Override
     public int getItemCount() {
 
         int totalCount = 5;
 
-        if(shelterDetailData != null){
+        if (shelterDetailData != null) {
 
-            if(shelterDetailData.getConvFacs().size() == 0)
+            if (shelterDetailData.getConvFacs().size() == 0)
                 totalCount--;
 
-            if(shelterDetailData.getRules().size() == 0)
+            if (shelterDetailData.getRules().size() == 0)
                 totalCount--;
+        }else{
+            totalCount = 0;
         }
 
         return totalCount;
@@ -202,6 +251,9 @@ public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public int getItemViewType(int position) {
 
+        if(shelterDetailData == null)
+            return -1;
+
         switch (position) {
 
             case 0:
@@ -211,35 +263,28 @@ public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 return VIEW_INTRODUCE;
 
             case 2:
-                if(shelterDetailData != null){
-                    if(shelterDetailData.getConvFacs().size() == 0 &&
-                            shelterDetailData.getRules().size() > 0)
-                        return VIEW_RULE;
+                if (shelterDetailData.getConvFacs().size() == 0 &&
+                        shelterDetailData.getRules().size() > 0)
+                    return VIEW_RULE;
 
-                    else if(shelterDetailData.getConvFacs().size() > 0 &&
-                            shelterDetailData.getRules().size() == 0)
-                        return VIEW_FACIL;
+                else if (shelterDetailData.getConvFacs().size() > 0)
+                    return VIEW_FACIL;
 
-                    else
-                        return VIEW_LOCATION;
-                }
-
-                return VIEW_FACIL;
-
+                else
+                    return VIEW_LOCATION;
 
             case 3:
-                if(shelterDetailData != null){
-                    if(shelterDetailData.getRules().size() == 0)
-                        return VIEW_LOCATION;
+                if (shelterDetailData.getRules().size() == 0)
+                    return VIEW_LOCATION;
 
-                    else
-                        return VIEW_RULE;
-                }
-                return VIEW_RULE;
+                else
+                    return VIEW_RULE;
 
-            default:
+            case 4:
                 return VIEW_LOCATION;
         }
+
+        return -1;
     }
 
 
@@ -275,7 +320,7 @@ public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.
             back.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Activity)context).finish();
+                    ((Activity) context).finish();
                 }
             });
         }
@@ -318,7 +363,7 @@ public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.
             facilList.setAdapter(adapter);
         }
 
-        public class ShelterFacilViewAdapter extends RecyclerView.Adapter{
+        public class ShelterFacilViewAdapter extends RecyclerView.Adapter {
 
             private ArrayList<DetailConvFacItem> items = new ArrayList<>();
 
@@ -334,9 +379,9 @@ public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
                 Glide.with(context).load(items.get(position).getImg())
                         .thumbnail(0.1f)
-                        .into(((FacilViewHolder)holder).facilImage);
+                        .into(((FacilViewHolder) holder).facilImage);
 
-                ((FacilViewHolder)holder).facilText.setText(items.get(position).getName());
+                ((FacilViewHolder) holder).facilText.setText(items.get(position).getName());
             }
 
             @Override
@@ -350,8 +395,7 @@ public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.
         }
 
 
-
-        public class FacilViewHolder extends RecyclerView.ViewHolder{
+        public class FacilViewHolder extends RecyclerView.ViewHolder {
 
             @BindView(R.id.facil_image)
             ImageView facilImage;
@@ -368,9 +412,6 @@ public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.
             }
         }
     }
-
-
-
 
 
     public class ShelterRuleView extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -409,18 +450,18 @@ public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 @Override
                 public void onPageSelected(int position) {
 
-                    if(position > 0){
+                    if (position > 0) {
 
                         pagerRight.setVisibility(View.VISIBLE);
-                    }else{
+                    } else {
 
                         pagerRight.setVisibility(View.INVISIBLE);
                     }
 
 
-                    if(position < shelterDetailData.getRules().size() - 1){
+                    if (position < shelterDetailData.getRules().size() - 1) {
                         pagerLeft.setVisibility(View.VISIBLE);
-                    }else{
+                    } else {
                         pagerLeft.setVisibility(View.INVISIBLE);
                     }
                 }
@@ -438,21 +479,21 @@ public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
 
                 case R.id.rule_pager_right:
 
-                    if(rulePager.getCurrentItem() > 0){
+                    if (rulePager.getCurrentItem() > 0) {
 
-                        rulePager.setCurrentItem(rulePager.getCurrentItem() - 1 , true);
+                        rulePager.setCurrentItem(rulePager.getCurrentItem() - 1, true);
                     }
 
                     break;
 
                 case R.id.rule_pager_left:
 
-                    if(rulePager.getCurrentItem() < shelterDetailData.getRules().size()){
-                        rulePager.setCurrentItem(rulePager.getCurrentItem() + 1 , true);
+                    if (rulePager.getCurrentItem() < shelterDetailData.getRules().size()) {
+                        rulePager.setCurrentItem(rulePager.getCurrentItem() + 1, true);
                     }
 
                     break;
@@ -466,78 +507,15 @@ public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.
         TextView shelterAddr;
 
         @BindView(R.id.map_view)
-        ViewGroup mapViewContainer;
-
-        MapView mapView;
+        FrameLayout mapViewContainer;
 
         public ShelterLocationView(final View itemView) {
             super(itemView);
 
             ButterKnife.bind(this, itemView);
-
-            if(mapView == null){
-                mapView = new MapView(context);
-                mapView.setMapViewEventListener(new MapView.MapViewEventListener() {
-                    @Override
-                    public void onMapViewInitialized(MapView mapView) {
-                    }
-
-                    @Override
-                    public void onMapViewCenterPointMoved(MapView mapView, MapPoint mapPoint) {
-
-                    }
-
-                    @Override
-                    public void onMapViewZoomLevelChanged(MapView mapView, int i) {
-
-                    }
-
-                    @Override
-                    public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) {
-
-                    }
-
-                    @Override
-                    public void onMapViewDoubleTapped(MapView mapView, MapPoint mapPoint) {
-
-                    }
-
-                    @Override
-                    public void onMapViewLongPressed(MapView mapView, MapPoint mapPoint) {
-
-                    }
-
-                    @Override
-                    public void onMapViewDragStarted(MapView mapView, MapPoint mapPoint) {
-                        itemView.getParent().requestDisallowInterceptTouchEvent(true);
-                    }
-
-                    @Override
-                    public void onMapViewDragEnded(MapView mapView, MapPoint mapPoint) {
-
-                    }
-
-                    @Override
-                    public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
-                        itemView.getParent().requestDisallowInterceptTouchEvent(false);
-                    }
-                });
-            }
-
-            mapViewContainer.addView(mapView);
         }
 
-        public void setMarkerData(String title, MapPoint point){
-            MapPOIItem marker = new MapPOIItem();
-            marker.setMarkerType(MapPOIItem.MarkerType.BluePin);
-            marker.setSelectedMarkerType(MapPOIItem.MarkerType.RedPin);
-            marker.setItemName(title);
-            marker.setMapPoint(point);
-
-            if(mapView != null){
-                mapView.setMapCenterPointAndZoomLevel(point, 3, false);
-                mapView.addPOIItem(marker);
-            }
+        public void setMarkerData(String title, MapPoint point) {
 
         }
 

@@ -17,6 +17,9 @@ public class MainRecyclerModel implements Parcelable{
     @SerializedName("shelter")
     private ArrayList<shelterItem> shelterSimpleList = new ArrayList<>();
 
+    @SerializedName("count")
+    int count = 0;
+
     protected MainRecyclerModel(Parcel in) {
         bannerList = in.createTypedArrayList(bannerItem.CREATOR);
     }
@@ -32,6 +35,14 @@ public class MainRecyclerModel implements Parcelable{
             return new MainRecyclerModel[size];
         }
     };
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 
     public ArrayList<bannerItem> getBannerList() {
         return bannerList;
@@ -91,6 +102,9 @@ public class MainRecyclerModel implements Parcelable{
 
         @SerializedName("type")
         private int type = 0;
+
+        @SerializedName("sex")
+        private int sex = 0;
 
 
         public int getId() {
@@ -173,6 +187,13 @@ public class MainRecyclerModel implements Parcelable{
             this.type = type;
         }
 
+        public int getSex() {
+            return sex;
+        }
+
+        public void setSex(int sex) {
+            this.sex = sex;
+        }
     }
 
     public static class bannerItem  implements Parcelable{

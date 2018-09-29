@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -21,16 +22,26 @@
         <android.support.v4.view.ViewPager
             android:id="@+id/shelter_img_pager"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="top" />
 
-
-        <com.matthewtamlin.sliding_intro_screen_library.DotIndicator
+        <com.rd.PageIndicatorView
             android:id="@+id/shelter_img_dot"
             android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"/>
+            android:layout_alignBottom="@+id/shelter_img_pager"
+            android:layout_marginBottom="10dp"
+            app:piv_animationType="none"
+            app:piv_dynamicCount="true"
+            app:piv_interactiveAnimation="false"
+            app:piv_selectedColor="@color/white"
+            app:piv_unselectedColor="#dcdcdc"
+            app:piv_viewPager="@id/shelter_img_pager"
+            app:piv_padding="6dp"
+            app:piv_radius="4dp"
+            app:piv_count="0" />
+
 
     </RelativeLayout>
 

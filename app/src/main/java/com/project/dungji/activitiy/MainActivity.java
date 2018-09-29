@@ -1,7 +1,6 @@
 package com.project.dungji.activitiy;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -14,30 +13,25 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.gson.JsonObject;
-import com.matthewtamlin.sliding_intro_screen_library.DotIndicator;
+import com.project.dungji.R;
+import com.project.dungji.activitiy.search.SearchMainActivity;
+import com.project.dungji.adapter.MainRecyclerAdapter;
+import com.project.dungji.fragment.MainViewpagerFragment;
+import com.project.dungji.model.MainRecyclerModel;
+import com.project.dungji.network.RetrofitApiCallback;
+import com.project.dungji.utility.GpsUtil;
+import com.rd.PageIndicatorView;
 
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-
-import com.project.dungji.activitiy.search.SearchResultActivity;
-import com.project.dungji.adapter.MainRecyclerAdapter;
-import com.project.dungji.fragment.MainViewpagerFragment;
-import com.project.dungji.model.MainRecyclerModel;
-import com.project.dungji.model.search.SearchResultModel;
-import com.project.dungji.network.RetrofitApiCallback;
-import com.project.dungji.R;
-import com.project.dungji.activitiy.search.SearchMainActivity;
-import com.project.dungji.utility.GpsUtil;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, ViewPager.OnPageChangeListener {
@@ -54,7 +48,7 @@ public class MainActivity extends BaseActivity
 
     PagerAdapter mPagerAdapter;
 
-    DotIndicator mDotIndicator;
+    PageIndicatorView mDotIndicator;
 
     NestedScrollView mScrollView;
 
@@ -97,8 +91,8 @@ public class MainActivity extends BaseActivity
 
         unbinder = ButterKnife.bind(this);
         unbinder.unbind();
-//        ButterKnife.bind(this);
-        dataset();
+
+        callMoreMainData();
 
         initLayout();
         initListener();
@@ -120,10 +114,6 @@ public class MainActivity extends BaseActivity
         mLayoutManager = new GridLayoutManager(this, 2);
         mLayoutManager.setItemPrefetchEnabled(true);
 
-
-        mDotIndicator.setSelectedDotColor(Color.parseColor("#ffffff"));
-        mDotIndicator.setUnselectedDotColor(Color.parseColor("#a5dddb"));
-
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mMainRecyclerAdapter);
         mRecyclerView.setNestedScrollingEnabled(false);
@@ -141,7 +131,7 @@ public class MainActivity extends BaseActivity
 
                         if(!mScrollView.canScrollVertically(1)){
                             if(!isLoad && !isAllData)
-                                dataset();
+                                callMoreMainData();
                         }
 
                         break;
@@ -174,11 +164,13 @@ public class MainActivity extends BaseActivity
     }
 
 
-    private void dataset() {
+    private void callMoreMainData() {
 
 
         if(isAllData)
             return;
+
+        mProgressDialog.show();
 
         isLoad = true;
 
@@ -237,7 +229,7 @@ public class MainActivity extends BaseActivity
                 mViewPager.setAdapter(mPagerAdapter);
 
 
-                mDotIndicator.setNumberOfItems(bannerList.size());
+                mDotIndicator.setCount(bannerList.size());
 
                 isLoad = false;
 
@@ -335,7 +327,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void onPageSelected(int position) {
 
-        mDotIndicator.setSelectedItem(mViewPager.getCurrentItem(), true);
+        mDotIndicator.setSelection(mViewPager.getCurrentItem());
     }
 
     @Override

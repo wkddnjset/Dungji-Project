@@ -1,47 +1,46 @@
 package com.project.dungji.dialog;
 
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.project.dungji.R;
 
 public class ProgressBarDialog extends Dialog {
-    String mMsg;
-    ImageView imageView;
+
     Context mContext;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.progress_dialog);
-//        imageView = (ImageView) findViewById(R.id.iv_loading);
-//
-//        Glide.with(mContext)
-//                .load(R.drawable.intro_test)
-//                .asGif()
-//                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-//                .into(imageView);
-        TextView tv = (TextView) findViewById(R.id.tv_loading_message);
-        if (mMsg != null && !mMsg.isEmpty()) {
-            tv.setText(mMsg);
-        }
     }
 
     public ProgressBarDialog(Context context) {
         // Dialog 배경을 투명 처리 해준다.
-        super(context, R.style.ProgressDialogTheme);
+        super(context, android.R.style.Theme_Translucent_NoTitleBar);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.progress_dialog);
+
         mContext = context;
     }
 
-    public ProgressBarDialog(Context context, String msg) {
-        // Dialog 배경을 투명 처리 해준다.
-        super(context, R.style.ProgressDialogTheme);
-        mContext = context;
+    @Override
+    public void show() {
 
-        mMsg = msg;
+        if(((Activity)mContext).isFinishing())
+            return;
+
+        super.show();
+    }
+
+    @Override
+    public void dismiss() {
+        super.dismiss();
     }
 }

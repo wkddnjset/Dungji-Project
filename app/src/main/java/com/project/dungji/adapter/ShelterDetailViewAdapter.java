@@ -2,36 +2,25 @@ package com.project.dungji.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.Surface;
-import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.matthewtamlin.sliding_intro_screen_library.DotIndicator;
 import com.project.dungji.R;
 import com.project.dungji.model.ShelterDetailModel;
 import com.project.dungji.model.detail.DetailConvFacItem;
 import com.project.dungji.utility.CustomViewPager;
-
-import net.daum.mf.map.api.MapPOIItem;
-import net.daum.mf.map.api.MapPoint;
-import net.daum.mf.map.api.MapView;
+import com.rd.PageIndicatorView;
 
 import java.util.ArrayList;
 
@@ -45,7 +34,6 @@ public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.
     private final int VIEW_INTRODUCE = 1;
     private final int VIEW_FACIL = 2;
     private final int VIEW_RULE = 3;
-    private final int VIEW_LOCATION = 4;
 
     private ShelterDetailModel shelterDetailData;
 
@@ -81,10 +69,6 @@ public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_shelter_rule, parent, false);
                 return new ShelterRuleView(v);
 
-
-            case VIEW_LOCATION:
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_shelter_location, parent, false);
-                return new ShelterLocationView(v);
         }
         return null;
     }
@@ -102,7 +86,8 @@ public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.
             ((ShelterBannerView) holder).shelterPager.setAdapter(adapter);
             adapter.notifyDataSetChanged();
 
-            ((ShelterBannerView) holder).shelterPagerDot.setNumberOfItems(shelterDetailData.getImages().size());
+            ((ShelterBannerView) holder).shelterPagerDot.setCount(shelterDetailData.getImages().size());
+            ((ShelterBannerView) holder).shelterPagerDot.bringToFront();
 
             ((ShelterBannerView) holder).shelterName.setText(shelterDetailData.getDetailInfoItem().getName());
             ((ShelterBannerView) holder).shelterAddr.setText(shelterDetailData.getDetailInfoItem().getSidoName() + " " + shelterDetailData.getDetailInfoItem().getGuGunName());
@@ -163,70 +148,13 @@ public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.
             }
 
 
-        } else if(holder instanceof ShelterLocationView) {
-
-            MapPoint shelterLocate = MapPoint.mapPointWithGeoCoord(Double.parseDouble(shelterDetailData.getDetailInfoItem().getLatitude()),
-                    Double.parseDouble(shelterDetailData.getDetailInfoItem().getLongitude()));
-
-            ((ShelterLocationView) holder).shelterAddr.setText(shelterDetailData.getDetailInfoItem().getAddress());
-//
-//            mapView = new MapView(context);
-//
-//            MapPOIItem marker = new MapPOIItem();
-//            marker.setMarkerType(MapPOIItem.MarkerType.BluePin);
-//            marker.setSelectedMarkerType(MapPOIItem.MarkerType.RedPin);
-//            marker.setItemName(shelterDetailData.getDetailInfoItem().getName());
-//            marker.setMapPoint(shelterLocate);
-//
-//            ((ShelterLocationView) holder).mapViewContainer.removeAllViews();
-//            ((ShelterLocationView) holder).mapViewContainer.addView(mapView);
-//
-//            mapView.setMapCenterPointAndZoomLevel(shelterLocate, 3, false);
-//            mapView.removeAllPOIItems();
-//            mapView.addPOIItem(marker);
-
-
-
         }
-    }
-
-    MapView mapView;
-
-    public void refreshMapView(RecyclerView.ViewHolder viewHolder){
-
-//        if(viewHolder instanceof ShelterLocationView){
-//
-//            MapPoint shelterLocate = MapPoint.mapPointWithGeoCoord(Double.parseDouble(shelterDetailData.getDetailInfoItem().getLatitude()),
-//                    Double.parseDouble(shelterDetailData.getDetailInfoItem().getLongitude()));
-//
-//            if(mapView != null){
-//                mapView = null;
-//            }
-//
-//            mapView = new MapView(context);
-//
-//            MapPOIItem marker = new MapPOIItem();
-//            marker.setMarkerType(MapPOIItem.MarkerType.BluePin);
-//            marker.setSelectedMarkerType(MapPOIItem.MarkerType.RedPin);
-//            marker.setItemName(shelterDetailData.getDetailInfoItem().getName());
-//            marker.setMapPoint(shelterLocate);
-//
-//            mapView.setMapCenterPointAndZoomLevel(shelterLocate, 3, false);
-//            mapView.removeAllPOIItems();
-//            mapView.addPOIItem(marker);
-//
-//            ((ShelterLocationView) viewHolder).mapViewContainer.removeAllViews();
-//            ((ShelterLocationView) viewHolder).mapViewContainer.addView(mapView);
-//
-//
-//        }
-
     }
 
     @Override
     public int getItemCount() {
 
-        int totalCount = 5;
+        int totalCount = 4;
 
         if (shelterDetailData != null) {
 
@@ -271,17 +199,14 @@ public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.
                     return VIEW_FACIL;
 
                 else
-                    return VIEW_LOCATION;
+                    return -1;
 
             case 3:
                 if (shelterDetailData.getRules().size() == 0)
-                    return VIEW_LOCATION;
+                    return -1;
 
                 else
                     return VIEW_RULE;
-
-            case 4:
-                return VIEW_LOCATION;
         }
 
         return -1;
@@ -297,7 +222,7 @@ public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.
         ViewPager shelterPager;
 
         @BindView(R.id.shelter_img_dot)
-        DotIndicator shelterPagerDot;
+        PageIndicatorView shelterPagerDot;
 
         @BindView(R.id.txt_shelter_type)
         TextView shelterType;
@@ -321,6 +246,24 @@ public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 @Override
                 public void onClick(View v) {
                     ((Activity) context).finish();
+                }
+            });
+
+            shelterPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+
+                    shelterPagerDot.setSelection(position);
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
                 }
             });
         }
@@ -501,23 +444,4 @@ public class ShelterDetailViewAdapter extends RecyclerView.Adapter<RecyclerView.
         }
     }
 
-    public class ShelterLocationView extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.shelter_addr)
-        TextView shelterAddr;
-
-        @BindView(R.id.map_view)
-        FrameLayout mapViewContainer;
-
-        public ShelterLocationView(final View itemView) {
-            super(itemView);
-
-            ButterKnife.bind(this, itemView);
-        }
-
-        public void setMarkerData(String title, MapPoint point) {
-
-        }
-
-    }
 }

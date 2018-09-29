@@ -3,11 +3,15 @@ package com.project.dungji.activitiy;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.JsonObject;
@@ -16,10 +20,18 @@ import com.project.dungji.adapter.ShelterDetailViewAdapter;
 import com.project.dungji.model.ShelterDetailModel;
 import com.project.dungji.network.RetrofitApiCallback;
 
+
+import net.daum.mf.map.api.MapPOIItem;
+import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapView;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ShelterDetailActivity extends BaseActivity implements View.OnClickListener {
+
+    @BindView(R.id.parent_scroll)
+    NestedScrollView mScrollView;
 
     @BindView(R.id.detail_list)
     RecyclerView shelterDetailView;
@@ -33,7 +45,18 @@ public class ShelterDetailActivity extends BaseActivity implements View.OnClickL
     @BindView(R.id.shelter_bottom_chat)
     ImageView bottomChat;
 
+    @BindView(R.id.location_view)
+    LinearLayout locationView;
+
+    @BindView(R.id.shelter_addr)
+    TextView shelterAddrText;
+
+    @BindView(R.id.map_view)
+    FrameLayout mapParent;
+
     private String callNumber;
+
+    private MapView mapView;
 
     private ShelterDetailViewAdapter detailViewAdapter;
 
@@ -74,23 +97,27 @@ public class ShelterDetailActivity extends BaseActivity implements View.OnClickL
 
         detailViewAdapter = new ShelterDetailViewAdapter();
         shelterDetailView.setAdapter(detailViewAdapter);
-        shelterDetailView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        shelterDetailView.setNestedScrollingEnabled(false);
+
+        bottomCall.setOnClickListener(this);
+
+        mapView = new MapView(this);
+
+        mapView.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+            public boolean onTouch(View v, MotionEvent event) {
 
-                if(recyclerView.getChildCount() - 1 == ((LinearLayoutManager) shelterDetailView.getLayoutManager()).findLastVisibleItemPosition())
-                    detailViewAdapter.refreshMapView(recyclerView.findViewHolderForAdapterPosition(recyclerView.getChildCount() - 1));
-            }
+                float x = event.getX();
+                float y = event.getY();
 
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-
-
+                if (mapView.getHeight() > y && mapView.getWidth() > x) {
+                    mScrollView.requestDisallowInterceptTouchEvent(true);
+                } else {
+                    mScrollView.requestDisallowInterceptTouchEvent(false);
+                }
+                return false;
             }
         });
-        bottomCall.setOnClickListener(this);
 
         initCallData();
     }
@@ -121,6 +148,34 @@ public class ShelterDetailActivity extends BaseActivity implements View.OnClickL
                 bottomName.setText(((ShelterDetailModel)resultData).getDetailInfoItem().getName());
 
                 callNumber = ((ShelterDetailModel)resultData).getDetailInfoItem().getTel();
+
+                MapPoint mp = MapPoint.mapPointWithGeoCoord(Double.parseDouble(((ShelterDetailModel)resultData).getDetailInfoItem().getLatitude()),
+                        Double.parseDouble(((ShelterDetailModel)resultData).getDetailInfoItem().getLongitude()));
+
+                MapPOIItem marker = new MapPOIItem();
+                marker.setMarkerType(MapPOIItem.MarkerType.BluePin);
+                marker.setSelectedMarkerType(MapPOIItem.MarkerType.RedPin);
+                marker.setItemName(((ShelterDetailModel)resultData).getDetailInfoItem().getName());
+                marker.setMapPoint(mp);
+
+                mapView.setMapCenterPointAndZoomLevel(mp, 3, false);
+                mapView.removeAllPOIItems();
+                mapView.addPOIItem(marker);
+
+                mapParent.removeAllViews();
+                mapParent.addView(mapView);
+
+                shelterAddrText.setText(((ShelterDetailModel)resultData).getDetailInfoItem().getAddress());
+
+                locationView.setVisibility(View.VISIBLE);
+
+
+                mScrollView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mScrollView.scrollTo(0,0);
+                    }
+                });
             }
 
             @Override
@@ -145,4 +200,6 @@ public class ShelterDetailActivity extends BaseActivity implements View.OnClickL
 
         }
     }
+
+
 }

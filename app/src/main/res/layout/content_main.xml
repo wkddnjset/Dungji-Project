@@ -24,13 +24,23 @@
                 android:layout_height="110dp"
                 android:layout_gravity="top" />
 
-            <com.matthewtamlin.sliding_intro_screen_library.DotIndicator
+            <com.rd.PageIndicatorView
                 android:id="@+id/DotIndicator"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_alignBottom="@+id/pager"
                 android:layout_centerInParent="true"
-                android:layout_gravity="center" />
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/pager"
+                android:layout_marginBottom="8dp"
+                app:piv_animationType="none"
+                app:piv_dynamicCount="true"
+                app:piv_interactiveAnimation="false"
+                app:piv_selectedColor="@color/white"
+                app:piv_unselectedColor="#a5dddb"
+                app:piv_viewPager="@id/pager"
+                app:piv_padding="4dp"
+                app:piv_radius="3dp"
+                app:piv_count="0"/>
+
 
             <TextView
                 android:id="@+id/main_info_text"
